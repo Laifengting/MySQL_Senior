@@ -1,0 +1,8 @@
+--总结：WHAT——WHY——HOW
+/*
+表TABLE
+视图VIEW
+序列SEQUENCE
+索引INDEX
+同义词SYNONYM
+*/
