@@ -67,7 +67,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>${spring-boot.version}</version>
+				<version>2.2.1.RELEASE</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -89,7 +89,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>2.1.17.RELEASE</version>
+				<version>2.2.1.RELEASE</version>
 				<configuration>
 					<mainClass>com.lft.shardingjdbc.ShardingJDBCApplication</mainClass>
 				</configuration>

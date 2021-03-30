@@ -2,17 +2,17 @@
 <project xmlns = "http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>spring-boot-starter-parent</artifactId>
 		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.1.RELEASE</version>
 		<relativePath/>
 	</parent>
-	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.lft</groupId>
-	<artifactId>sharding_jdbc_01_horizontal_sub_table</artifactId>
+	<artifactId>sharding_jdbc_04_common_table</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>sharding_jdbc_01_horizontal_sub_table</name>
+	<name>sharding_jdbc_04_common_table</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -91,7 +91,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>2.2.1.RELEASE</version>
 				<configuration>
-					<mainClass>com.lft.shardingjdbc.ShardingJDBCapplication</mainClass>
+					<mainClass>com.lft.sharding.ShardingApplication</mainClass>
 				</configuration>
 				<executions>
 					<execution>
