@@ -63,19 +63,19 @@ DECLARE
 	v_salary employees.salary%TYPE;
 
 BEGIN
-	SELECT salary
-	INTO   v_salary
-	FROM   employees
-	WHERE  employee_id > 100;
+SELECT salary
+	INTO v_salary
+	FROM employees
+	WHERE employee_id > 100;
 
-	dbms_output.put_line(v_salary);
+dbms_output.put_line(v_salary);
 
 EXCEPTION
 	WHEN too_many_rows THEN
 		dbms_output.put_line('输出多行');
-	WHEN OTHERS THEN
+WHEN OTHERS THEN
 		dbms_output.put_line('出现其他类型异常');
-	
+
 END;
 
 --非预定义的异常处理
@@ -90,17 +90,18 @@ PRAGMA EXCEPTION_INIT(< 异常情况>, < 错误代码>);
 
 DECLARE
 	e_delete_id_exception EXCEPTION;
-	PRAGMA EXCEPTION_INIT(e_delete_id_exception,
+PRAGMA EXCEPTION_INIT(e_delete_id_exception,
 						  -2292);
 
 BEGIN
-	DELETE FROM employees
-	WHERE  employee_id = 100;
+DELETE
+	FROM employees
+	WHERE employee_id = 100;
 
 EXCEPTION
 	WHEN e_delete_id_exception THEN
 		dbms_output.put_line('违反完整性约束条件，故不可删除此用户');
-	
+
 END;
 
 --用户自定义的异常处理
@@ -117,108 +118,111 @@ END;
 
 DECLARE
 	e_too_high_sal EXCEPTION;
-	v_sal employees.salary%TYPE;
+v_sal employees.salary%TYPE;
 
 BEGIN
-	SELECT salary
-	INTO   v_sal
-	FROM   employees
-	WHERE  employee_id = 100;
-	IF v_sal > 10000 THEN
+SELECT salary
+	INTO v_sal
+	FROM employees
+	WHERE employee_id = 100;
+IF v_sal > 10000 THEN
 		RAISE e_too_high_sal;
-	END IF;
+END IF;
 
 EXCEPTION
 	WHEN e_too_high_sal THEN
 		dbms_output.put_line('工资太高');
-	
+
 END;
 
 --异常整合
 
 DECLARE
 	e_too_high_sal EXCEPTION;
-	v_sal employees.salary%TYPE;
+v_sal employees.salary%TYPE;
 
-	e_delete_id_exception EXCEPTION;
-	PRAGMA EXCEPTION_INIT(e_delete_id_exception,
+e_delete_id_exception EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_delete_id_exception,
 						  -2292);
 
 BEGIN
-	SELECT salary
-	INTO   v_sal
-	FROM   employees
-	WHERE  employee_id = 100;
-	IF v_sal > 10000 THEN
+SELECT salary
+	INTO v_sal
+	FROM employees
+	WHERE employee_id = 100;
+IF v_sal > 10000 THEN
 		RAISE e_too_high_sal;
-	END IF;
+END IF;
 
-	DELETE FROM employees
-	WHERE  employee_id = 100;
+DELETE
+	FROM employees
+	WHERE employee_id = 100;
 
 EXCEPTION
 	WHEN e_too_high_sal THEN
 		dbms_output.put_line('工资太高');
-	
-	WHEN e_delete_id_exception THEN
+
+WHEN e_delete_id_exception THEN
 		dbms_output.put_line('违反完整性约束条件，故不可删除此用户');
-	
-	WHEN OTHERS THEN
+
+WHEN OTHERS THEN
 		dbms_output.put_line('出现其他类型异常');
-	
+
 END;
 
---18. 异常的基本程序: 通过 select ... into ... 查询某人的工资, 若没有查询到, 则输出 "未找到数据"
---定义一个
-DECLARE
+--18. 异常的基本程序: 通过
+SELECT... into... 查询某人的工资, 若没有查询到, 则输出 "未找到数据"
+	--定义一个
+	DECLARE
 	v_sal employees.salary%TYPE;
 BEGIN
-	SELECT salary
-	INTO   v_sal
-	FROM   employees
-	WHERE  employee_id = 1000;
+SELECT salary
+	INTO v_sal
+	FROM employees
+	WHERE employee_id = 1000;
 EXCEPTION
 	WHEN no_data_found THEN
 		dbms_output.put_line('未找到数据');
-	
+
 END;
 
 --定义多个
 DECLARE
 	v_sal employees.salary%TYPE;
 BEGIN
-	SELECT salary
-	INTO   v_sal
-	FROM   employees;
+SELECT salary
+	INTO v_sal
+	FROM employees;
 EXCEPTION
 	WHEN no_data_found THEN
 		dbms_output.put_line('查无此人');
-	WHEN too_many_rows THEN
+WHEN too_many_rows THEN
 		dbms_output.put_line('输出多行');
-	
+
 END;
 
 --19. 更新指定员工工资，如工资小于300，则加100；对 NO_DATA_FOUND 异常, TOO_MANY_ROWS 进行处理.
 DECLARE
 	v_sal employees.salary%TYPE;
 BEGIN
-	SELECT salary
-	INTO   v_sal
-	FROM   employees
-	WHERE  employee_id = 101;
+SELECT salary
+	INTO v_sal
+	FROM employees
+	WHERE employee_id = 101;
 
-	IF v_sal < 300 THEN
-		UPDATE employees
-		SET    salary = salary + 100
-		WHERE  employee_id = 101;
-	END IF;
+IF v_sal < 300 THEN
+UPDATE employees
+SET
+	salary = salary + 100
+	WHERE employee_id = 101;
+END IF;
 
 EXCEPTION
 	WHEN no_data_found THEN
 		dbms_output.put_line('查无此人');
-	WHEN too_many_rows THEN
+WHEN too_many_rows THEN
 		dbms_output.put_line('输出多行');
-	
+
 END;
 
 --自定义异常: 更新指定员工工资，增加100；若该员工不存在则抛出用户自定义异常: no_result
@@ -226,14 +230,15 @@ DECLARE
 	--自定义异常                                   
 	no_result EXCEPTION;
 BEGIN
-	UPDATE employees
-	SET    salary = salary + 100
-	WHERE  employee_id = 1001;
+UPDATE employees
+SET
+	salary = salary + 100
+	WHERE employee_id = 1001;
 
-	--使用隐式游标, 抛出自定义异常
+--使用隐式游标, 抛出自定义异常
 	IF SQL%NOTFOUND THEN
 		RAISE no_result;
-	END IF;
+END IF;
 
 EXCEPTION
 
@@ -251,8 +256,10 @@ SQLCODE=0  SQLERRM=’normal, successfual completion’
 */
 
 --例 5. 将 ORACLE 错误代码及其信息存入错误代码表
-CREATE TABLE errors(errnum NUMBER(4),
-					errmsg VARCHAR2(100));
+CREATE TABLE errors (
+	errnum NUMBER (4),
+	errmsg VARCHAR2 (100)
+);
 DECLARE
 	err_msg VARCHAR2(100);
 BEGIN
@@ -260,38 +267,35 @@ BEGIN
 	FOR err_num IN -100 .. 0
 	LOOP
 		err_msg := SQLERRM(err_num);
-		INSERT INTO errors
-		VALUES
-			(err_num,
-			 err_msg);
-	END LOOP;
+INSERT INTO errors
+	VALUES (err_num,
+			err_msg);
+END LOOP;
 END;
-drop TABLE errors;
+DROP TABLE errors;
 
 --例 6. 查询 ORACLE 错误代码；
 BEGIN
-	INSERT INTO emp
-		(empno,
-		 ename,
-		 hiredate,
-		 deptno)
-	VALUES
-		(2222,
-		 ‘jerry’,
-		 SYSDATE,
-		 20);
-	dbms_output.put_line('插入数据记录成功!');
-	INSERT INTO emp
-		(empno,
-		 ename,
-		 hiredate,
-		 deptno)
-	VALUES
-		(2222,
-		 ‘jerry’,
-		 SYSDATE,
-		 20);
-	dbms_output.put_line('插入数据记录成功!');
+INSERT INTO emp
+(empno,
+ ename,
+ hiredate,
+ deptno)
+	VALUES (2222,
+			‘jerry’,
+			sysdate,
+			20);
+dbms_output.put_line('插入数据记录成功!');
+INSERT INTO emp
+(empno,
+ ename,
+ hiredate,
+ deptno)
+	VALUES (2222,
+			‘jerry’,
+			sysdate,
+			20);
+dbms_output.put_line('插入数据记录成功!');
 EXCEPTION
 	WHEN OTHERS THEN
 		dbms_output.put_line(SQLCODE || '---' || SQLERRM);

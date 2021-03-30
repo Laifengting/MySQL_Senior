@@ -24,20 +24,30 @@ USE girls;
 			
 		引入案例:查询部门编号>90或邮箱中包含a的员工信息
 */
-SELECT * FROM employees WHERE email LIKE '%a%' OR department_id > 90;
+SELECT *
+	FROM employees
+	WHERE email LIKE '%a%' OR department_id > 90;
 
 ###转换成UNION
 
-SELECT * FROM employees WHERE email LIKE '%a%'
+SELECT *
+	FROM employees
+	WHERE email LIKE '%a%'
 UNION
-SELECT * FROM employees WHERE department_id > 90;
+SELECT *
+	FROM employees
+	WHERE department_id > 90;
 
 /*
 		案例：查询中国男性用户的信息以及外国男性用户的信息
 */
-SELECT * FROM student WHERE sex = '男'
+SELECT *
+	FROM student
+	WHERE sex = '男'
 UNION ALL
-SELECT * FROM student WHERE sex = '女'
+SELECT *
+	FROM student
+	WHERE sex = '女'
 
 
 

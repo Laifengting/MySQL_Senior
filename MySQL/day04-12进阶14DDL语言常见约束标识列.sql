@@ -27,13 +27,13 @@ TRUNCATE TABLE tab_identity;
 根据所得出的结论，应该在插入单行的时候使用VALUES，在插入多行的时候使用VALUE
  */
 INSERT INTO tab_identity
-VALUES (NULL, 'John');
+	VALUES (NULL, 'John');
 
 INSERT INTO tab_identity(id, name)
-VALUES (NULL, 'John');
+	VALUES (NULL, 'John');
 
 INSERT INTO tab_identity(name)
-VALUES ('John');
+	VALUES ('John');
 
 # 查看自增长的步长与偏移
 SHOW VARIABLES LIKE '%auto_increment%';

@@ -40,9 +40,9 @@ CREATE FUNCTION myf1() RETURNS INT
 BEGIN
 	# 定义一个变量
 	DECLARE c INT DEFAULT 0;
-	SELECT count(*)
-	INTO c #赋值
-	FROM employees;
+	SELECT COUNT(*)
+		INTO c #赋值
+		FROM employees;
 	RETURN c;
 END $
 
@@ -53,13 +53,13 @@ SELECT myf1() $
         1.2.2.1 有参有返回
         案例1：根据员工名，返回他的工资
  */
-CREATE FUNCTION myf2(empName VARCHAR(20)) RETURNS DOUBLE
+CREATE FUNCTION myf2(empname VARCHAR(20)) RETURNS DOUBLE
 BEGIN
 	SET @sal = 0;#定义一个用户变量
 	SELECT salary
-	INTO @sal #赋值
-	FROM employees
-	WHERE last_name = empName;
+		INTO @sal #赋值
+		FROM employees
+		WHERE last_name = empname;
 	RETURN @sal;
 END $
 
@@ -69,14 +69,15 @@ SELECT myf2('Jones') $
         1.2.2.2 有参有返回
         案例2：根据部门名，返回该部门的平均工资
  */
-CREATE FUNCTION myf3(deptName VARCHAR(20)) RETURNS DOUBLE
+CREATE FUNCTION myf3(deptname VARCHAR(20)) RETURNS DOUBLE
 BEGIN
 	DECLARE sal DOUBLE;
-	SELECT avg(salary)
-	INTO sal
-	FROM employees e
-		     JOIN departments d ON e.department_id = d.department_id
-	WHERE d.department_name = deptName;
+	SELECT AVG(salary)
+		INTO sal
+		FROM employees   e
+		JOIN departments d
+			 ON e.department_id = d.department_id
+		WHERE d.department_name = deptname;
 	RETURN sal;
 END $
 
@@ -97,13 +98,13 @@ DROP FUNCTION myf3;
 /*
         案例：创建函数，实现传入两个float，返回两者之各
  */
-DROP FUNCTION sumFunc $
-CREATE FUNCTION sumFunc(num1 FLOAT, num2 FLOAT) RETURNS FLOAT
+DROP FUNCTION sumfunc $
+CREATE FUNCTION sumfunc(num1 FLOAT, num2 FLOAT) RETURNS FLOAT
 BEGIN
-	DECLARE sumN1N2 FLOAT;
-# 	SELECT (num1 + num2) INTO sumN1N2;
-	SET sumN1N2 = num1 + num2;
-	RETURN sumN1N2;
+	DECLARE sumn1n2 FLOAT;
+	# 	SELECT (num1 + num2) INTO sumN1N2;
+	SET sumn1n2 = num1 + num2;
+	RETURN sumn1n2;
 END $
 
-SELECT sumFunc(11, 12) $
+SELECT sumfunc(11,12) $

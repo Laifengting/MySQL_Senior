@@ -59,7 +59,7 @@ SELECT @@global.tx_isolation;
         1.1.4 为某个指定的全局变量赋值
  */
 #方式一：
-SET @@GLOBAL.autocommit = 1;
+SET @@global.autocommit = 1;
 #方式二：
 SET GLOBAL AUTOCOMMIT = 0;
 
@@ -86,15 +86,15 @@ SHOW VARIABLES LIKE '%char%';
 /*
 		1.2.3 查看指定的会话变量的值
  */
-SELECT @@SESSION.autocommit;
-SELECT @@SESSION.tx_isolation;
+SELECT @@session.autocommit;
+SELECT @@session.tx_isolation;
 SELECT @@tx_isolation;
 
 /*
         1.2.4 为某个指定的会话变量赋值
  */
 #方式一：
-SET @@SESSION.autocommit = 1;
+SET @@session.autocommit = 1;
 SET @@autocommit = 1;
 #方式二：
 SET SESSION AUTOCOMMIT = 0;
@@ -159,9 +159,9 @@ SET @name = 'John';
 SET @name = 100;
 SET @count = 1;
 # 赋值
-SELECT count(*)
-INTO @count
-FROM myemployees.employees;
+SELECT COUNT(*)
+	INTO @count
+	FROM myemployees.employees;
 # 使用(查看用户变量的值)
 SELECT @count;
 

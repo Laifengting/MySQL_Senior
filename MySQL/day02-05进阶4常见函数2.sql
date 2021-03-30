@@ -32,129 +32,89 @@ USE myemployees;
 /*
 		1. 简单的使用
 */
-SELECT
-	SUM( salary ) 
-FROM
-	employees;
-SELECT
-	AVG( salary ) 
-FROM
-	employees;
-SELECT
-	MAX( salary ) 
-FROM
-	employees;
-SELECT
-	min( salary ) 
-FROM
-	employees;
-SELECT
-	COUNT( salary ) 
-FROM
-	employees;
-SELECT
-	SUM( salary ) AS 和,
-	AVG( salary ) AS 平均,
-	MAX( salary ) AS 最高,
-	MIN( salary ) AS 最低,
-	COUNT( salary ) AS 个数 
-FROM
-	employees;
-SELECT
-	SUM( salary ) AS 和,
-	ROUND( AVG( salary ), 2 ) AS 平均,
-	MAX( salary ) AS 最高,
-	MIN( salary ) AS 最低,
-	COUNT( salary ) AS 个数 
-FROM
-	employees;
+SELECT SUM(salary)
+	FROM employees;
+SELECT AVG(salary)
+	FROM employees;
+SELECT MAX(salary)
+	FROM employees;
+SELECT MIN(salary)
+	FROM employees;
+SELECT COUNT(salary)
+	FROM employees;
+SELECT SUM(salary) 和,
+	   AVG(salary) 平均,
+	   MAX(salary) 最高,
+	   MIN(salary) 最低,
+	   COUNT(salary) 个数
+	FROM employees;
+SELECT SUM(salary) 和,
+	   ROUND(AVG(salary),2) 平均,
+	   MAX(salary) 最高,
+	   MIN(salary) 最低,
+	   COUNT(salary) 个数
+	FROM employees;
 /*
 		2. 参数支持哪些类型
 */
-SELECT
-	SUM( last_name ),
-	AVG( last_name ) 
-FROM
-	employees;
-SELECT
-	MAX( last_name ),
-	MIN( last_name ),
-	COUNT( last_name ) 
-FROM
-	employees;
-SELECT
-	MAX( hiredate ),
-	MIN( hiredate ) 
-FROM
-	employees;
-SELECT
-	COUNT( commission_pct ) 
-FROM
-	employees;
-SELECT
-	COUNT( last_name ) 
-FROM
-	employees;
+SELECT SUM(last_name),
+	   AVG(last_name)
+	FROM employees;
+SELECT MAX(last_name),
+	   MIN(last_name),
+	   COUNT(last_name)
+	FROM employees;
+SELECT MAX(hiredate),
+	   MIN(hiredate)
+	FROM employees;
+SELECT COUNT(commission_pct)
+	FROM employees;
+SELECT COUNT(last_name)
+	FROM employees;
 /*
 		3. 是否忽略null值
 		SUM、AVG、MAX、MIN、COUNT忽略null值
 */
-SELECT
-	SUM( commission_pct ),
-	AVG( commission_pct ),
-	SUM( commission_pct )/ 35,
-	SUM( commission_pct )/ 107 
-FROM
-	employees;
-SELECT
-	MAX( commission_pct ),
-	MIN( commission_pct ) 
-FROM
-	employees;
-SELECT
-	COUNT( commission_pct ) 
-FROM
-	employees;
+SELECT SUM(commission_pct),
+	   AVG(commission_pct),
+	   SUM(commission_pct) / 35,
+	   SUM(commission_pct) / 107
+	FROM employees;
+SELECT MAX(commission_pct),
+	   MIN(commission_pct)
+	FROM employees;
+SELECT COUNT(commission_pct)
+	FROM employees;
 /*
 		4. 和DISTINCT搭配使用
 */
-SELECT
-	SUM( DISTINCT salary ),
-	SUM( salary ),
-	AVG( DISTINCT salary ),
-	AVG( salary ),
-	MAX( DISTINCT salary ),
-	MAX( salary ),
-	MIN( DISTINCT salary ),
-	MIN( salary ) 
-FROM
-	employees;
-SELECT
-	COUNT( DISTINCT salary ),
-	COUNT( salary ) 
-FROM
-	employees;
+SELECT SUM(DISTINCT salary),
+	   SUM(salary),
+	   AVG(DISTINCT salary),
+	   AVG(salary),
+	   MAX(DISTINCT salary),
+	   MAX(salary),
+	   MIN(DISTINCT salary),
+	   MIN(salary)
+	FROM employees;
+SELECT COUNT(DISTINCT salary),
+	   COUNT(salary)
+	FROM employees;
 /*
 		5. COUNT函数的详细介绍
 */
-SELECT
-	COUNT( salary ) 
-FROM
-	employees;
+SELECT COUNT(salary)
+	FROM employees;
 /*
 		统计行数COUNT(*)
 */
-SELECT
-	COUNT(*) 
-FROM
-	employees;
+SELECT COUNT(*)
+	FROM employees;
 /*
 		统计行数COUNT(常量值)
 */
-SELECT
-	COUNT( 1 ) 
-FROM
-	employees;
+SELECT COUNT(1)
+	FROM employees;
 /*
 		效率：
 		MYISAM存储引擎下,COUNT(*)的效率高

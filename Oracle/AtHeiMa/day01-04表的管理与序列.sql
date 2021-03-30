@@ -11,9 +11,9 @@
 */
 
 
-create table person(
-       pid number(20),
-       pname varchar2(10)
+CREATE TABLE person (
+	pid NUMBER (20),
+	pname VARCHAR2 (10)
 );
 
 ----删除表
@@ -21,7 +21,7 @@ create table person(
 语法：
        DROP TABLE 表名;
 */
-drop table person;
+DROP TABLE person;
 
 ----修改表
 /*
@@ -36,16 +36,19 @@ drop table person;
 
 
 --添加一列
-alter table person add gender number(1);
+ALTER TABLE person
+	ADD gender NUMBER (1);
 
 --修改列类型
-alter table person modify gender char(1);
+ALTER TABLE person
+	MODIFY gender CHAR(1);
 
 --修改列名
-alter table person rename column gender to sex;
+ALTER TABLE person RENAME COLUMN gender TO sex;
 
 --删除一列
-alter table person drop column sex;
+ALTER TABLE person
+	DROP COLUMN sex;
 
 
 ----表数据的操作
@@ -59,12 +62,13 @@ INSERT INTO 表名 VALUES(值 1，值 2，...)
 */
 
 --查询表中记录
-select * from person;
+SELECT *
+	FROM person;
 
 --添加一条记录
-insert into person(pid,pname) values(1,'lft');
-commit;
-
+INSERT INTO person(pid, pname)
+	VALUES (1, 'lft');
+COMMIT;
 
 /*
 --UPDATE修改
@@ -74,8 +78,11 @@ commit;
 */
 
 --修改一条记录
-update person set pname = '小李' where pid = 1;
-commit;
+UPDATE person
+SET
+	pname = '小李'
+	WHERE pid = 1;
+COMMIT;
 
 
 ----三个删除
@@ -88,13 +95,14 @@ commit;
    
 */
 --删除表中全部记录
-delete from person;
+DELETE
+	FROM person;
 --删除表结构
-drop table person;
+DROP TABLE person;
 --先删除表，再次创建表。效果等同于删除表中全部记录。
 --在数据量大的情况下，尤其在表中带有索引的情况下，该操作效率高。
 --索引可以提高查询效率，但是会影响增删改效率。
-truncate table person;
+TRUNCATE TABLE person;
 
 
 
@@ -110,16 +118,20 @@ truncate table person;
 */
 
 --序列不真的属于任何一张表，但是可以逻辑和表做绑定。
---dual:虚表，只是为了补全语法，没有任何意义。
-create sequence s_person;
-select s_person.nextval from dual;
+--DUAL:虚表，只是为了补全语法，没有任何意义。
+CREATE
+SEQUENCE s_person;
+SELECT s_person.nextval
+	FROM dual;
 
 --添加一条记录
-insert into person (pid, pname) values(s_person.nextval,'小张');
-commit;
+INSERT INTO person (pid, pname)
+	VALUES (s_person.nextval, '小张');
+COMMIT;
 
 --查询表中记录
-select * from person;
+SELECT *
+	FROM person;
 
 
 

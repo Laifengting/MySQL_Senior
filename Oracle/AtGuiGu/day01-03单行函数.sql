@@ -35,49 +35,52 @@ REPLACE(‘abcd’,’b’,’m’)         amcd
 */
 
 --大小写控制函数的应用
-SELECT lower('AGDFHDFHVDFGFDG'),
-	   upper('sdfsdfasdfsdgfgha'),
+SELECT LOWER('AGDFHDFHVDFGFDG'),
+	   UPPER('sdfsdfasdfsdgfgha'),
 	   initcap('sdfsdfs sdfsdfaghaa DGADFADFGADF')
-FROM   dual;
+	FROM dual;
 
 --查询90号部门的员工信息
 SELECT *
-FROM   employees
-WHERE  department_id = 90;
+	FROM employees
+	WHERE department_id = 90;
 
 --【案例】查询King的员工信息
 SELECT *
-FROM   employees
-WHERE  last_name = 'king'; --因为字符串是严格区分大小写的。所以查询不出来。
+	FROM employees
+	WHERE last_name = 'king';
+--因为字符串是严格区分大小写的。所以查询不出来。
 
 --通过使用大小控制函数来修改以上代码
 SELECT *
-FROM   employees
-WHERE  lower(last_name) = 'king'; --通过lower()将last_name都改成小写。
+	FROM employees
+	WHERE LOWER(last_name) = 'king';
+--通过lower()将last_name都改成小写。
 
 --concat(),substr(),length(),instr()的使用
-SELECT concat('hello',
+SELECT CONCAT('hello',
 			  'world'),
-	   substr('Helloworld',
+	   SUBSTR('Helloworld',
 			  2,
 			  4),
-	   length('Helloworld'),
-	   instr('Helloworld',
+	   LENGTH('Helloworld'),
+	   INSTR('Helloworld',
 			 'w')
-FROM   dual;
+	FROM dual;
 
 --lpad(),rpad()的使用
 SELECT employee_id,
 	   last_name,
-	   lpad(salary,
+	   LPAD(salary,
 			10,
 			'*'),
-	   rpad(salary,
+	   RPAD(salary,
 			10,
 			'*')
-FROM   employees;
+	FROM employees;
 
---trim(),replace()的使用
+--trim(),
+REPLACE () 的使用
 /*
 TRIM([ { { LEADING | TRAILING | BOTH }
          [ trim_character ]
@@ -96,7 +99,7 @@ SELECT TRIM('h' FROM 'helloHworldh'),
 	   REPLACE('abcdab',
 			   'b',
 			   'm')
-FROM   dual;
+	FROM dual;
 
 --数值函数
 /*
@@ -105,12 +108,12 @@ trunc(n1 [, n2 ])
 mod(n2, n1)
 */
 --round()的使用
-SELECT round(435.456,
+SELECT ROUND(435.456,
 			 2),
-	   round(435.456),
-	   round(435.456,
+	   ROUND(435.456),
+	   ROUND(435.456,
 			 -2)
-FROM   dual;
+	FROM dual;
 
 --trunc()的使用
 SELECT trunc(435.456,
@@ -118,11 +121,11 @@ SELECT trunc(435.456,
 	   trunc(435.456),
 	   trunc(435.456,
 			 -2)
-FROM   dual;
+	FROM dual;
 
 SELECT MOD(10,
 		   3)
-FROM   dual;
+	FROM dual;
 
 --日期函数
 /*
@@ -134,66 +137,66 @@ LAST_DAY        本月的最后一天
 ROUND         日期四舍五入
 TRUNC       日期截断
 */
-SELECT SYSDATE,
-	   SYSDATE + 1,
-	   SYSDATE - 3
-FROM   dual;
+SELECT sysdate,
+	   sysdate + 1,
+	   sysdate - 3
+	FROM dual;
 
 --【案例】查询员工到公司多少天了。
 SELECT employee_id,
 	   last_name,
-	   trunc(SYSDATE - hire_date) worke_days
-FROM   employees;
+	   trunc(sysdate - hire_date) worke_days
+	FROM employees;
 
 --【案例】查询员工到公司多少月了。
 SELECT employee_id,
 	   last_name,
-	   months_between(SYSDATE,
+	   months_between(sysdate,
 					  hire_date) worke_months
-FROM   employees;
+	FROM employees;
 
 --add_months(),next_day()的使用
-SELECT add_months(SYSDATE,
+SELECT add_months(sysdate,
 				  2),
-	   add_months(SYSDATE,
+	   add_months(sysdate,
 				  -3),
-	   next_day(SYSDATE,
+	   next_day(sysdate,
 				'sunday')
-FROM   dual;
+	FROM dual;
 
 --last_day()案例
 --来公司的员工中，hire_date是每个月倒数第二天来公司的员工有哪些？
 SELECT last_name,
 	   hire_date
-FROM   employees
-WHERE  hire_date = last_day(hire_date) - 2;
+	FROM employees
+	WHERE hire_date = LAST_DAY(hire_date) - 2;
 
 --round(),trunc()的使用
-SELECT SYSDATE,
-	   round(SYSDATE,
+SELECT sysdate,
+	   ROUND(sysdate,
 			 'YEAR'),
-	   round(SYSDATE,
+	   ROUND(sysdate,
 			 'MONTH'),
-	   round(SYSDATE,
+	   ROUND(sysdate,
 			 'DDD'),
-	   round(SYSDATE,
+	   ROUND(sysdate,
 			 'HH24'),
-	   round(SYSDATE,
+	   ROUND(sysdate,
 			 'MI')
-FROM   dual;
+	FROM dual;
 
-SELECT SYSDATE,
-	   trunc(SYSDATE,
+SELECT sysdate,
+	   trunc(sysdate,
 			 'YEAR'),
-	   trunc(SYSDATE,
+	   trunc(sysdate,
 			 'MONTH'),
-	   trunc(SYSDATE,
+	   trunc(sysdate,
 			 'DDD'),
-	   trunc(SYSDATE,
+	   trunc(sysdate,
 			 'HH24'),
-	   trunc(SYSDATE,
+	   trunc(sysdate,
 			 'MI')
-FROM   dual;
+	FROM dual;
 
 --转换函数
 /*
@@ -201,10 +204,11 @@ FROM   dual;
 date ↔ varchar2 ↔ number
 */
 SELECT '12' + 2
-FROM   dual; --输出14
+	FROM dual;
+--输出14
 
-SELECT SYSDATE + '2'
-FROM   dual;
+SELECT sysdate + '2'
+	FROM dual;
 
 /*
 显性
@@ -216,9 +220,9 @@ to_char
 SELECT employee_id,
 	   to_char(hire_date,
 			   'yyyy"年"mm"月"dd"日"')
-FROM   employees
---日期转字符
---WHERE  to_char(hire_date,'yyyy"年"mm"月"dd"日"') = '1994年06月07日';
+	FROM employees --日期转字符
+--
+	WHERE to_char(hire_date, 'yyyy"年"mm"月"dd"日"') = '1994年06月07日';
 --日期转字符
 --WHERE  to_char(hire_date,'yyyy/mm/dd') = '1994/06/07';
 WHERE  to_date('1994-06-07',
@@ -227,21 +231,24 @@ WHERE  to_date('1994-06-07',
 --数字转字符
 SELECT to_char(1234567.89,
 			   '999,999,999.99')
-FROM   dual; --1,234,567.89
+	FROM dual;
+--1,234,567.89
 --数字转字符
 SELECT to_char(1234567.89,
 			   '000,000,000.00')
-FROM   dual; --001,234,567.89
+	FROM dual;
+--001,234,567.89
 
 --数字转字符
 SELECT to_char(1234567.89,
 			   '$000,000,000.00')
-FROM   dual; --$001,234,567.89
+	FROM dual;
+--$001,234,567.89
 
 --字符转数字
 SELECT to_number('$001,234,567.89',
 				 '$000,000,000.00')
-FROM   dual;
+	FROM dual;
 
 --通用函数
 /*
@@ -255,16 +262,16 @@ coalesce(expr1,expr2,...exprn)：返回至少两个表达式中的第一个非�
 --练习1：求公司员工的年薪（含commission_pct)
 SELECT last_name,
 	   12 * salary * (1 + nvl(commission_pct,
-							  0)) "年薪"
-FROM   employees;
+							  0)) 年薪
+	FROM employees;
 
 --练习2：输出last_name,department_id，当department_id为null时，显示‘没有部门’。
 --当类型不兼容时，需要类型转换。
 SELECT last_name,
 	   nvl(to_char(department_id),
 		   '没有部门')
---nvl(to_char(department_id,'99999999'),'没有部门')
-FROM   employees;
+		   - -nvl(to_char(department_id,'99999999'),'没有部门')
+	FROM employees;
 
 --练习3：查询员工的奖金率，若为空，返回0.01,若不为空，返回实际奖金率+0.015
 SELECT last_name,
@@ -272,7 +279,7 @@ SELECT last_name,
 	   nvl2(commission_pct,
 			commission_pct + 0.015,
 			0.01)
-FROM   employees;
+	FROM employees;
 
 --条件表达式
 /*
@@ -291,33 +298,35 @@ SELECT employee_id,
 	   salary,
 	   department_id,
 	   CASE department_id
-		   WHEN 10 THEN
-			salary * 1.1
-		   WHEN 20 THEN
-			salary * 1.2
-		   ELSE
-			salary * 1.3
-	   END "薪水"
-FROM   employees
-WHERE  department_id IN (10,
-						 20,
-						 30);
+		   WHEN 10
+			   THEN
+			   salary * 1.1
+		   WHEN 20
+			   THEN
+			   salary * 1.2
+			   ELSE
+			   salary * 1.3
+		   END 薪水
+	FROM employees
+	WHERE department_id IN (10,
+							20,
+							30);
 
 --改成DECODE
 SELECT employee_id,
 	   last_name,
 	   salary,
 	   department_id,
-	   decode(department_id,
+	   DECODE(department_id,
 			  10,
 			  salary * 1.1,
 			  20,
 			  salary * 1.2,
-			  salary * 1.3) "薪水"
-FROM   employees
-WHERE  department_id IN (10,
-						 20,
-						 30);
+			  salary * 1.3) 薪水
+	FROM employees
+	WHERE department_id IN (10,
+							20,
+							30);
 
 --总结
 /*
@@ -333,48 +342,48 @@ WHERE  department_id IN (10,
 
 --练习：打印出 "2009年10月14日 9:25:40" 格式的当前系统的日期和时间.
 --fm去除年月日时分秒前面的0
-SELECT to_char(SYSDATE,
-			   'fmYYYY"年"MM"月"DD"日" HH:MI:SS') "时间日期"
-FROM   dual;
+SELECT to_char(sysdate,
+			   'fmYYYY"年"MM"月"DD"日" HH:MI:SS') 时间日期
+	FROM dual;
 
 --练习：格式化数字: 1234567.89 为 1,234,567.89
 SELECT to_char(1234567.89,
-			   '999,999,999.99') "数字"
-FROM   dual;
+			   '999,999,999.99') 数字
+	FROM dual;
 
 --1.显示系统时间(注：日期+时间)
-SELECT to_char(SYSDATE,
+SELECT to_char(sysdate,
 			   'fmYYYY"年"MM"月"DD"日" HH24:MI:SS')
-FROM   dual;
+	FROM dual;
 
 --2.查询员工号，姓名，工资，以及工资提高百分之20%后的结果（new salary）
 SELECT employee_id,
 	   last_name,
 	   salary,
 	   salary * 1.2 "new salary"
-FROM   employees;
+	FROM employees;
 
 --3.将员工的姓名按首字母排序，并写出姓名的长度（length）
 SELECT last_name,
-	   length(last_name)
-FROM   employees
-ORDER  BY last_name ASC;
+	   LENGTH(last_name)
+	FROM employees
+	ORDER BY last_name ASC;
 
 --4.查询各员工的姓名，并显示出各员工在公司工作的月份数（worked_month）。
 SELECT last_name,
-	   round(months_between(SYSDATE,
+	   ROUND(months_between(sysdate,
 							hire_date),
-			 1) "worked_month"
-FROM   employees;
+			 1) worked_month
+	FROM employees;
 
 --5.查询员工的姓名，以及在公司工作的月份数（worked_month），并按月份数降序排列
 SELECT last_name,
 	   hire_date,
-	   round(months_between(SYSDATE,
+	   ROUND(months_between(sysdate,
 							hire_date),
-			 1) "worked_month"
-FROM   employees
-ORDER  BY "worked_month" DESC;
+			 1) worked_month
+	FROM employees
+	ORDER BY worked_month DESC;
 
 --6.做一个查询，产生下面的结果
 /*<last_name> earns <salary> monthly but wants <salary*3>
@@ -386,17 +395,17 @@ SELECT last_name || ' earns ' || to_char(salary,
 										 'fm$999999') || ' monthly but wants ' ||
 	   to_char(salary * 3,
 			   'fm$999999') "Dream Salary"
-FROM   employees;
+	FROM employees;
 
 --使用concat多重嵌套。【注意：MySQL中CONCAT是可以连接多个字符串的。】
-SELECT concat(concat(concat(last_name,
+SELECT CONCAT(CONCAT(CONCAT(last_name,
 							' earns '),
-					 concat(to_char(salary,
+					 CONCAT(to_char(salary,
 									'fm$999999'),
 							' monthly but wants ')),
 			  to_char(salary * 3,
 					  'fm$999999')) "Dream Salary"
-FROM   employees;
+	FROM employees;
 
 --7.使用decode函数，按照下面的条件：
 /*job             grade
@@ -408,9 +417,9 @@ ST_CLERK           E
 产生下面的结果
 Last_name Job_id       Grade
 king        AD_PRES      A*/
-SELECT last_name "Last_name",
-	   job_id "Job_id",
-	   decode(job_id,
+SELECT last_name last_name,
+	   job_id job_id,
+	   DECODE(job_id,
 			  'AD_PRES',
 			  'A',
 			  'ST_MAN',
@@ -420,27 +429,32 @@ SELECT last_name "Last_name",
 			  'SA_REP',
 			  'D',
 			  'ST_CLERK',
-			  'E') "Grade"
-FROM   employees
-WHERE  job_id = 'AD_PRES';
+			  'E') grade
+	FROM employees
+	WHERE job_id = 'AD_PRES';
 
 SELECT *
-FROM   employees;
+	FROM employees;
 
 --8.将第7题的查询用case函数再写一遍。
-SELECT last_name "Last_name",
-	   job_id "Job_id",
+SELECT last_name last_name,
+	   job_id job_id,
 	   CASE job_id
-		   WHEN 'AD_PRES' THEN
-			'A'
-		   WHEN 'ST_MAN' THEN
-			'B'
-		   WHEN 'IT_PROG' THEN
-			'C'
-		   WHEN 'SA_REP' THEN
-			'D'
-		   WHEN 'ST_CLERK' THEN
-			'E'
-	   END "Grade"
-FROM   employees
-WHERE  job_id = 'AD_PRES';
+		   WHEN 'AD_PRES'
+			   THEN
+			   'A'
+		   WHEN 'ST_MAN'
+			   THEN
+			   'B'
+		   WHEN 'IT_PROG'
+			   THEN
+			   'C'
+		   WHEN 'SA_REP'
+			   THEN
+			   'D'
+		   WHEN 'ST_CLERK'
+			   THEN
+			   'E'
+		   END grade
+	FROM employees
+	WHERE job_id = 'AD_PRES';

@@ -45,7 +45,7 @@
         # 案例：插入到admin表中五条记录
  */
 SELECT *
-FROM girls.admin;
+	FROM girls.admin;
 
 USE girls;
 
@@ -54,11 +54,11 @@ DELIMITER $
 CREATE PROCEDURE myp1()
 BEGIN
 	INSERT INTO admin(username, password)
-	VALUES ('Jack', '0001'),
-	       ('John', '0002'),
-	       ('Helen', '0003'),
-	       ('Jerry', '0004'),
-	       ('Tom', '0005');
+		VALUES ('Jack', '0001'),
+			   ('John', '0002'),
+			   ('Helen', '0003'),
+			   ('Jerry', '0004'),
+			   ('Tom', '0005');
 END $
 
 # 调用
@@ -71,12 +71,13 @@ CALL myp1()$
 # 创建
 USE girls;
 DELIMITER $
-CREATE PROCEDURE myp2(IN beautyName VARCHAR(20))
+CREATE PROCEDURE myp2(IN beautyname VARCHAR(20))
 BEGIN
 	SELECT bo.*
-	FROM boys bo
-		     RIGHT JOIN beauty b ON bo.id = b.boyfriend_id
-	WHERE b.name = beautyName;
+		FROM boys         bo
+		RIGHT JOIN beauty b
+				   ON bo.id = b.boyfriend_id
+		WHERE b.name = beautyname;
 END $
 
 # 调用
@@ -92,16 +93,16 @@ CREATE PROCEDURE myp4(IN username VARCHAR(20), IN password VARCHAR(10))
 BEGIN
 	DECLARE result INT DEFAULT 0; # 声明并初始化自定义变量
 
-	SELECT count(*)
-	INTO result #自定义变量赋值
-	FROM admin a
-	WHERE a.username = username
-	  AND a.password = password;
-	SELECT IF(result > 0, 'SUCCESS', 'DEFEAT'); #变量的使用
+	SELECT COUNT(*)
+		INTO result #自定义变量赋值
+		FROM admin a
+		WHERE a.username = username
+		  AND a.password = password;
+	SELECT IF(result > 0,'SUCCESS','DEFEAT'); #变量的使用
 END $
 
 # 调用
-CALL myp4('Tom', 0005)$
+CALL myp4('Tom',0005)$
 
 /*
         1.2.3.1 创建带一个OUT参数的存储过程
@@ -109,18 +110,19 @@ CALL myp4('Tom', 0005)$
  */
 USE girls;
 DELIMITER $
-CREATE PROCEDURE myp5(IN beautyName VARCHAR(20), OUT boyName VARCHAR(10))
+CREATE PROCEDURE myp5(IN beautyname VARCHAR(20), OUT boyname VARCHAR(10))
 BEGIN
-	SELECT bo.boyName
-	INTO boyName
-	FROM boys bo
-		     INNER JOIN beauty b ON bo.id = b.boyfriend_id
-	WHERE b.name = beautyName;
+	SELECT bo.boyname
+		INTO boyname
+		FROM boys         bo
+		INNER JOIN beauty b
+				   ON bo.id = b.boyfriend_id
+		WHERE b.name = beautyname;
 END $
 
 # 调用
-CALL myp5('Tom', @bName)$
-SELECT @bName$
+CALL myp5('Tom',@bname)$
+SELECT @bname$
 
 /*
         1.2.3.2 创建带多个OUT参数的存储过程
@@ -128,19 +130,19 @@ SELECT @bName$
  */
 USE girls;
 DELIMITER $
-CREATE PROCEDURE myp6(IN beautyName VARCHAR(20), OUT boyName VARCHAR(10), OUT userCP INT)
+CREATE PROCEDURE myp6(IN beautyname VARCHAR(20), OUT boyname VARCHAR(10), OUT usercp INT)
 BEGIN
-	SELECT bo.boyName, bo.userCP
-	INTO boyName, userCP
-	FROM boys bo
-		     INNER JOIN beauty b
-		                ON bo.id = b.boyfriend_id
-	WHERE b.name = beautyName;
+	SELECT bo.boyname, bo.usercp
+		INTO boyname, usercp
+		FROM boys         bo
+		INNER JOIN beauty b
+				   ON bo.id = b.boyfriend_id
+		WHERE b.name = beautyname;
 END $
 
 # 调用
-CALL myp6('Angelababy', @bName, @bUserCP) $
-SELECT @bName, @bUserCP $
+CALL myp6('Angelababy',@bname,@busercp) $
+SELECT @bname, @busercp $
 
 /*
         1.2.4. 创建带一个INOUT参数的存储过程
@@ -157,7 +159,7 @@ END $
 #调用
 SET @m = 10 $
 SET @n = 20 $
-CALL myp7(@m, @n) $
+CALL myp7(@m,@n) $
 SELECT @m, @n $
 
 /*

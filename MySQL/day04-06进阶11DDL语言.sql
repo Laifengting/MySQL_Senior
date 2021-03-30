@@ -29,10 +29,10 @@ USE girls;
 		案例：创建库Books
 */
 # 创建库，如果库已经存在会报错。
- CREATE DATABASE Books;
+CREATE DATABASE books;
 
 #创建库，如果存在不创建，如果不存在创建。
- CREATE DATABASE IF NOT EXISTS Books;
+CREATE DATABASE IF NOT EXISTS books;
 
 /*
 		1. 库的管理
@@ -44,17 +44,17 @@ rename database Books TO eBooks;
 */
 
 # 更改库的字符集
-ALTER DATABASE Books CHARACTER SET utf8;
+ALTER DATABASE books CHARACTER SET utf8;
 
 /*
 		1. 库的管理
 		1.3 库的删除  
 */
 #删除库，如果库已经不存在会报错。
-DROP DATABASE Books;
+DROP DATABASE books;
 
 #删除库，如果不存在不删除，如果存在删除。
-DROP DATABASE IF EXISTS Books;
+DROP DATABASE IF EXISTS books;
 
 
 
@@ -74,21 +74,21 @@ DROP DATABASE IF EXISTS Books;
 /*
 		案例：创建表book
 */
-CREATE TABLE IF NOT EXISTS  book(
+CREATE TABLE IF NOT EXISTS book (
 	#书的编号
-	id INT,
+	id          INT,
 
 	#图书名
-	bookName VARCHAR(20),
+	bookname    VARCHAR(20),
 
 	#价格
-	price DOUBLE,
+	price       DOUBLE,
 
 	#作者编号
-	authorId INT,
+	authorid    INT,
 
 	#出版日期
-	publishDate DATETIME
+	publishdate DATETIME
 );
 
 DESC book;
@@ -96,10 +96,10 @@ DESC book;
 /*
 		案例：创建表author
 */
-CREATE TABLE IF NOT EXISTS author(
-	authorId INT,
-	authorName VARCHAR(20),
-	nation VARCHAR(20)
+CREATE TABLE IF NOT EXISTS author (
+	authorid   INT,
+	authorname VARCHAR(20),
+	nation     VARCHAR(20)
 );
 
 
@@ -121,48 +121,54 @@ CREATE TABLE IF NOT EXISTS author(
 		2.2 表的修改
 		案例：修改表中的列名
 */
-ALTER TABLE book CHANGE COLUMN pubDate pbDate DATETIME;
+ALTER TABLE book
+	CHANGE COLUMN pubdate pbdate DATETIME;
 #注：修改列名时 COLUMN 关键字可以省略
-ALTER TABLE book CHANGE pbDate pubDate DATETIME;
+ALTER TABLE book
+	CHANGE pbdate pubdate DATETIME;
 
 /*
 		2. 表的管理
 		2.2 表的修改
 		案例：修改列的类型或约束
 */
-ALTER TABLE book MODIFY COLUMN pubDate TIMESTAMP;
+ALTER TABLE book
+	MODIFY COLUMN pubdate TIMESTAMP;
 #注：修改列的类型或约束时 COLUMN 关键字可以省略
-ALTER TABLE book MODIFY pubDate DATETIME;
+ALTER TABLE book
+	MODIFY pubdate DATETIME;
 
 /*
 		2. 表的管理
 		2.2 表的修改
 		案例：添加新列
 */
-ALTER TABLE author ADD COLUMN annual DOUBLE;
+ALTER TABLE author
+	ADD COLUMN annual DOUBLE;
 #注：添加新列时 COLUMN 关键字可以省略
-ALTER TABLE author ADD annual2 DOUBLE;
+ALTER TABLE author
+	ADD annual2 DOUBLE;
 
 /*
 		2. 表的管理
 		2.2 表的修改
 		案例：删除列
 */
-ALTER TABLE author DROP COLUMN annual;
+ALTER TABLE author
+	DROP COLUMN annual;
 #注：删除列时 COLUMN 关键字可以省略
-ALTER TABLE author DROP annual2;
-
+ALTER TABLE author
+	DROP annual2;
 
 /*
 		2. 表的管理
 		2.2 表的修改
 		案例：修改表名
 */
-ALTER TABLE author RENAME TO `authors`;
+ALTER TABLE author RENAME TO authors;
 
 DESC book;
-DESC `authors`;
-
+DESC authors;
 
 /*
 		2. 表的管理
@@ -170,7 +176,7 @@ DESC `authors`;
 
 		语法：DROP TABLE 表名
 */
-DROP TABLE IF EXISTS `authors`;
+DROP TABLE IF EXISTS authors;
 
 SHOW TABLES;
 
@@ -196,39 +202,44 @@ CREATE TABLE 表名(列名 列的类型 【(长度) 约束】,
 		2.4 表的复制
 */
 
-INSERT INTO `authors` VALUES
-(1,'村上春树','日本'),
-(2,'莫言','中国'),
-(3,'金庸','中国');
+INSERT INTO authors
+	VALUES (1, '村上春树', '日本'),
+		   (2, '莫言', '中国'),
+		   (3, '金庸', '中国');
 
-SELECT * FROM `authors`;
+SELECT *
+	FROM authors;
 
 /*
 		2.4.1仅仅复制表的结构
 */
-CREATE TABLE authors_copy LIKE `authors`;
+CREATE TABLE authors_copy LIKE authors;
 
-SELECT * FROM authors_copy;
-
+SELECT *
+	FROM authors_copy;
 
 /*
 		2.4.2复制表的结构+数据
 */
-CREATE TABLE authors_copy2 SELECT * FROM `authors`;
+CREATE TABLE authors_copy2
+	SELECT *
+		FROM authors;
 
 /*
 		2.4.3复制表的结构 + 部分数据
 */
-CREATE TABLE authors_copy3 SELECT * FROM `authors` WHERE nation = '中国';
-
+CREATE TABLE authors_copy3
+	SELECT *
+		FROM authors
+		WHERE nation = '中国';
 
 /*
 		2.4.4复制表的部分结构 + 部分数据
 */
 CREATE TABLE authors_copy4
-# 仅复制列名，不复制数据
-SELECT authorId,authorName
-FROM `authors`
-#WHERE 1=2;
-WHERE 0;
+	# 仅复制列名，不复制数据
+	SELECT authorid, authorname
+		FROM authors
+			#WHERE 1=2;
+		WHERE 0;
 

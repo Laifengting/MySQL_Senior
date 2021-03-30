@@ -18,15 +18,20 @@ CREATE SEQUENCE sequence
        [{CACHE n | NOCACHE}];  --是否缓存登录
 */
 --创建序列
-create sequence empseq
-increment by 10 --每次增长10个
-start with 10 --从10开始
-maxvalue 100 --最大值100
-cycle--需要循环
-nocache;--不需要缓存登录
+CREATE
+SEQUENCE empseq
+INCREMENT BY 10 --每次增长10个
+START
+WITH 10 --从10开始
+MAXVALUE 100 --最大值100
+CYCLE--需要循环
+NOCACHE;
+--不需要缓存登录
 
-select empseq.nextval from dual;
-select empseq.currval from dual;
+SELECT empseq.nextval
+	FROM dual;
+SELECT empseq.currval
+	FROM dual;
 
 --查询序列
 /*
@@ -39,9 +44,9 @@ FROM	user_sequences;
 如果指定NOCACHE 选项，则列LAST_NUMBER 显示序列中下一个有效的值
 */
 
-SELECT	sequence_name, min_value, max_value, 
-	increment_by, last_number
-FROM	user_sequences;
+SELECT sequence_name, min_value, max_value,
+	   increment_by, last_number
+	FROM user_sequences;
 
 --修改序列
 /*
@@ -59,37 +64,39 @@ ALTER SEQUENCE sequence_name
     改变序列的初始值只能通过删除序列之后重建序列的方法实现
 */
 --创建表
-CREATE TABLE emp3 AS
-SELECT employee_id,
-	   last_name,
-	   salary
-FROM   employees
-WHERE  1 = 2;
+CREATE TABLE emp3
+AS
+	SELECT employee_id,
+		   last_name,
+		   salary
+		FROM employees
+		WHERE 1 = 2;
 
-SELECT * FROM emp3;
+SELECT *
+	FROM emp3;
 --插入数据
 INSERT INTO emp3
-VALUES
-	(1,
-	 'AA',
-	 3000);
+	VALUES (1,
+			'AA',
+			3000);
 
 INSERT INTO emp3
-VALUES
-	(empseq.nextval,
-	 'EE',
-	 3300);
+	VALUES (empseq.nextval,
+			'EE',
+			3300);
 
 --删除数据
-DELETE FROM emp3
-WHERE  employee_id IN (21,
-					   31,
-					   41,
-					   51,
-					   61);
+DELETE
+	FROM emp3
+	WHERE employee_id IN (21,
+						  31,
+						  41,
+						  51,
+						  61);
 
 --修改序列
-ALTER SEQUENCE empseq
+ALTER
+SEQUENCE empseq
 INCREMENT BY 1
 NOCYCLE;
 
@@ -106,12 +113,11 @@ NOCYCLE;
 如果不将序列的值装入内存(NOCACHE), 可使用表 USER_SEQUENCES 查看序列当前的有效值
 */
 INSERT INTO emp3
-VALUES
-	(empseq.nextval,
-	 'GG',
-	 3700);
+	VALUES (empseq.nextval,
+			'GG',
+			3700);
 
-rollback;
+ROLLBACK;
 --删除序列
 /*
 使用 DROP SEQUENCE 语句删除序列
@@ -120,14 +126,18 @@ rollback;
 DROP SEQUENCE sequence_name;
 */
 --创建序列
-create sequence empseq1
-increment by 1 --每次增长10个
-start with 1 --从10开始
-maxvalue 99999 --最大值100
-nocycle--需要循环
-nocache;--不需要缓存登录
+CREATE
+SEQUENCE empseq1
+INCREMENT BY 1 --每次增长10个
+START
+WITH 1 --从10开始
+MAXVALUE 99999 --最大值100
+NOCYCLE--需要循环
+NOCACHE;
+--不需要缓存登录
 
-DROP SEQUENCE empseq1;
+DROP
+SEQUENCE empseq1;
 
 
 --索引
@@ -173,19 +183,19 @@ ON 		employees(last_name);
 */
 
 --创建索引
-create index emp3_id_idx
-on emp3(employee_id);
+CREATE INDEX emp3_id_idx
+	ON emp3(employee_id);
 
 
 --查询索引
 /*
 可以使用数据字典视图 USER_INDEXES 和 USER_IND_COLUMNS 查看索引的信息
 */
-SELECT	ic.index_name, ic.column_name,
-	ic.column_position col_pos,ix.uniqueness
-FROM	user_indexes ix, user_ind_columns ic
-WHERE	ic.index_name = ix.index_name
-AND	ic.table_name = 'EMP3';
+SELECT ic.index_name, ic.column_name,
+	   ic.column_position col_pos, ix.uniqueness
+	FROM user_indexes ix, user_ind_columns ic
+	WHERE ic.index_name = ix.index_name
+	  AND ic.table_name = 'EMP3';
 
 --删除索引
 /*
@@ -199,7 +209,7 @@ DROP INDEX emp3_id_idx;
 只有索引的拥有者或拥有DROP ANY INDEX 权限的用户才可以删除索引
 删除操作是不可回滚的
 */
-drop index emp3_id_idx;
+DROP INDEX emp3_id_idx;
 
 
 --同义词-synonym
@@ -216,13 +226,16 @@ CREATE SYNONYM empv FOR EMPVIEW;
 */
 
 --创建同义词
-CREATE SYNONYM emp FOR employees;
+CREATE
+SYNONYM emp FOR employees;
 
 --从同义词中查询表中信息。
-SELECT * FROM emp;
+SELECT *
+	FROM emp;
 
 --删除同义词
-DROP SYNONYM emp;
+DROP
+SYNONYM emp;
 
 --总结
 /*
@@ -233,22 +246,26 @@ DROP SYNONYM emp;
 */
 
 --练习：1.创建序列dept_id_seq，开始值为200，每次增长10，最大值为10000
-create sequence detp_id_seq
-start with 200
-increment by 10
-maxvalue 10000;
+CREATE
+SEQUENCE detp_id_seq
+START
+WITH 200
+INCREMENT BY 10
+MAXVALUE 10000;
 
 --练习：2.使用序列向表dept中插入数据
-insert into dept values(detp_id_seq.nextval,'HR');
+INSERT INTO dept
+	VALUES (detp_id_seq.nextval, 'HR');
 
-SELECT * FROM dept;
+SELECT *
+	FROM dept;
 --练习准备：创建一个空表
-create table dept as 
-select department_id id,department_name name 
-from departments
-where 1=2
-
---练习：65. 创建序列: 
+CREATE TABLE dept
+AS
+	SELECT department_id id, department_name name
+		FROM departments
+		WHERE 1 = 2
+			- -练习：65.创建序列:
 /*
 1). create sequence hs 
     increment by 10 

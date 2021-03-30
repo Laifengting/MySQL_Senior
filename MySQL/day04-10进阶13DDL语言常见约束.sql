@@ -66,34 +66,34 @@
 CREATE DATABASE IF NOT EXISTS students;
 
 USE students;
-CREATE TABLE stuInfo (
+CREATE TABLE stuinfo (
 	#主键约束
 	id      INT PRIMARY KEY,
-# 	#主键约束 不能为多个
-# 	id1      INT PRIMARY KEY,
+	# 	#主键约束 不能为多个
+	# 	id1      INT PRIMARY KEY,
 	#非空约束
-	stuName VARCHAR(20) NOT NULL,
+	stuname VARCHAR(20) NOT NULL,
 	#检查约束
 	gender  CHAR(1) CHECK ( gender IN ('男', '女')),
 	#唯一约束
 	seat    INT UNIQUE,
-# 	#唯一约束 可以有多个
-# 	seat2    INT UNIQUE,
+	# 	#唯一约束 可以有多个
+	# 	seat2    INT UNIQUE,
 	#默认约束
 	age     INT DEFAULT 18,
 	#外键
-	majorId INT /*FOREIGN KEY*/ REFERENCES major (id)
+	majorid INT /*FOREIGN KEY*/ REFERENCES major(id)
 );
 
 CREATE TABLE major (
 	id        INT PRIMARY KEY,
-	majorName VARCHAR(20)
+	majorname VARCHAR(20)
 );
 
-DESC stuInfo;
+DESC stuinfo;
 
 #查看stuInfo表中所有的索引，包括主键，外键，唯一
-SHOW INDEX FROM stuInfo;
+SHOW INDEX FROM stuinfo;
 
 /*
         1. 创建表时添加约束
@@ -106,58 +106,58 @@ SHOW INDEX FROM stuInfo;
                 【CONSTRAINT 约束名】 约束类型(字段名)
 
 */
-DROP TABLE IF EXISTS stuInfo;
+DROP TABLE IF EXISTS stuinfo;
 
-CREATE TABLE IF NOT EXISTS stuInfo (
+CREATE TABLE IF NOT EXISTS stuinfo (
 	id      INT,
-	stuName VARCHAR(20),
+	stuname VARCHAR(20),
 	gender  CHAR(1),
 	seat    INT,
 	age     INT,
-	majorId INT,
+	majorid INT,
 	#添加主键约束 (添加键名pk时，在MySQL中主键名只能为PRIMARY，在Oracle中别名可以是自己取的名字pk)
 	CONSTRAINT pk PRIMARY KEY (id),
 
-# 	#添加组合主键约束 当id,stuname都相同时，就不能添加
-# 	CONSTRAINT pk PRIMARY KEY (id,stuname),
+	# 	#添加组合主键约束 当id,stuname都相同时，就不能添加
+	# 	CONSTRAINT pk PRIMARY KEY (id,stuname),
 
 	#添加唯一约定
 	CONSTRAINT uq UNIQUE (seat),
 	#添加检查约束
 	CONSTRAINT ck CHECK ( gender IN ('男', '女') ),
 	#添加外键约束
-	CONSTRAINT fk_stuInfo_major FOREIGN KEY (majorId) REFERENCES major (id)
+	CONSTRAINT fk_stuinfo_major FOREIGN KEY (majorid) REFERENCES major(id)
 );
 
-SHOW INDEX FROM stuInfo;
+SHOW INDEX FROM stuinfo;
 
 /*
         通用的写法：
  */
 
-CREATE TABLE IF NOT EXISTS stuInfo (
+CREATE TABLE IF NOT EXISTS stuinfo (
 	id      INT PRIMARY KEY,
-	stuName VARCHAR(20) NOT NULL,
+	stuname VARCHAR(20) NOT NULL,
 	sex     CHAR(1),
 	age     INT DEFAULT 18,
 	seat    INT UNIQUE,
-	majorId INT,
-	CONSTRAINT fk_stuInfo_major FOREIGN KEY (majorId) REFERENCES major (id)
+	majorid INT,
+	CONSTRAINT fk_stuinfo_major FOREIGN KEY (majorid) REFERENCES major(id)
 );
 
 /*
  *      删除表，创建新表，不带约束。
  */
 
-DROP TABLE IF EXISTS stuInfo;
+DROP TABLE IF EXISTS stuinfo;
 
-CREATE TABLE IF NOT EXISTS stuInfo (
+CREATE TABLE IF NOT EXISTS stuinfo (
 	id      INT,
-	stuName VARCHAR(20),
+	stuname VARCHAR(20),
 	gender  CHAR(1),
 	seat    INT,
 	age     INT,
-	majorId INT
+	majorid INT
 );
 
 /*
@@ -173,8 +173,8 @@ CREATE TABLE IF NOT EXISTS stuInfo (
          2. 修改表时添加约束
            2.1 添加非空约束
 */
-ALTER TABLE stuInfo
-	MODIFY COLUMN stuName VARCHAR(20) NOT NULL;
+ALTER TABLE stuinfo
+	MODIFY COLUMN stuname VARCHAR(20) NOT NULL;
 
 /*
         2. 修改表时添加约束
@@ -217,26 +217,26 @@ ALTER TABLE stuinfo
 */
 # 表级约束
 ALTER TABLE stuinfo
-	ADD FOREIGN KEY (majorId) REFERENCES major (id);
+	ADD FOREIGN KEY (majorid) REFERENCES major(id);
 # 表级约束 带名字 传统方式添加外键
 ALTER TABLE stuinfo
-	ADD CONSTRAINT fk_stuinfo_major FOREIGN KEY (majorId) REFERENCES major (id);
+	ADD CONSTRAINT fk_stuinfo_major FOREIGN KEY (majorid) REFERENCES major(id);
 
 # 删除外键
-ALTER TABLE students.stuInfo
+ALTER TABLE students.stuinfo
 	DROP FOREIGN KEY fk_stuinfo_major;
 
 SELECT *
-FROM major;
+	FROM major;
 INSERT INTO major
-VALUES (3, '大数据');
+	VALUES (3, '大数据');
 
 SELECT *
-FROM stuInfo;
+	FROM stuinfo;
 
-TRUNCATE TABLE students.stuInfo;
+TRUNCATE TABLE students.stuinfo;
 
-INSERT INTO students.stuInfo
+INSERT INTO students.stuinfo
 SELECT 1, 'John1', '女', NULL, NULL, 1
 UNION ALL
 SELECT 2, 'John2', '女', NULL, NULL, 1
@@ -256,24 +256,24 @@ SELECT 8, 'John8', '女', NULL, NULL, 1;
 # 删除专业表的3号专业
 # 以下方式无法删除。以下为主表，删除时，要先删除从表，再删除主表。
 DELETE
-FROM major
-WHERE id = 3;
+	FROM major
+	WHERE id = 3;
 
 # 解决上面的方式一：级联删除
 ALTER TABLE stuinfo
-	ADD CONSTRAINT fk_stuinfo_major FOREIGN KEY (majorId) REFERENCES major (id) ON DELETE CASCADE;
+	ADD CONSTRAINT fk_stuinfo_major FOREIGN KEY (majorid) REFERENCES major(id) ON DELETE CASCADE;
 
 DELETE
-FROM major
-WHERE id = 3;
+	FROM major
+	WHERE id = 3;
 
 # 解决上面的方式二：级联置空
 ALTER TABLE stuinfo
-	ADD CONSTRAINT fk_stuinfo_major FOREIGN KEY (majorId) REFERENCES major (id) ON DELETE SET NULL;
+	ADD CONSTRAINT fk_stuinfo_major FOREIGN KEY (majorid) REFERENCES major(id) ON DELETE SET NULL;
 
 DELETE
-FROM major
-WHERE id = 2;
+	FROM major
+	WHERE id = 2;
 
 
 /*
@@ -289,10 +289,10 @@ WHERE id = 2;
 			3.1 删除非空约束
 */
 ALTER TABLE stuinfo
-	MODIFY COLUMN stuName VARCHAR(20) NULL;
+	MODIFY COLUMN stuname VARCHAR(20) NULL;
 
 ALTER TABLE stuinfo
-	MODIFY COLUMN stuName VARCHAR(20);
+	MODIFY COLUMN stuname VARCHAR(20);
 
 /*
         3. 修改表时删除约束

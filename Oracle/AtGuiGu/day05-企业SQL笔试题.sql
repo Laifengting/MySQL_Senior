@@ -4,64 +4,88 @@ Course(CID, Cname, TID) 课程表
 SC(SID, CID, score) 成绩表 
 Teacher(TID, Tname) 教师表
 */
-create table student (--学生表 
-	sid number(20),--学号
-    sname varchar2(10),--姓名
-    sage number(3),--年龄
-    ssex char--性别
+CREATE TABLE student (
+	--学生表
+	sid NUMBER(
+	20
+),--学号
+    sname VARCHAR2(10),--姓名
+    sage NUMBER(3),--年龄
+    ssex CHAR--性别
 );
 
-create table course(--课程表 
-	cid number(20),--课程号
-    cname varchar2(10),--课程名
-    tid number(20)--老师号
+CREATE TABLE course (
+	--课程表
+	cid NUMBER(
+	20
+),--课程号
+    cname VARCHAR2(10),--课程名
+    tid NUMBER(20)--老师号
 );
 
 
 
-create table sc(--成绩表 
-	sid number(20),--学号
-    cid number(20),--课程号
-    score number(10)--得分
+CREATE TABLE sc (
+	--成绩表
+	sid NUMBER(
+	20
+),--学号
+    cid NUMBER(20),--课程号
+    score NUMBER(10)--得分
 );
 
-ALTER TABLE sc modify(cid varchar2(3));
+ALTER TABLE sc
+	MODIFY(cid VARCHAR2 (3));
 
-SELECT * FROM sc;
+SELECT *
+	FROM sc;
 
-truncate table sc;
+TRUNCATE TABLE sc;
 
-insert into sc values(1,'001',90);
-insert into sc values(1,'002',89);
-insert into sc values(2,'001',88);
-insert into sc values(2,'002',91);
-insert into sc values(3,'001',86);
-insert into sc values(3,'002',85);
-insert into sc values(4,'001',95);
-insert into sc values(4,'002',97);
+INSERT INTO sc
+	VALUES (1, '001', 90);
+INSERT INTO sc
+	VALUES (1, '002', 89);
+INSERT INTO sc
+	VALUES (2, '001', 88);
+INSERT INTO sc
+	VALUES (2, '002', 91);
+INSERT INTO sc
+	VALUES (3, '001', 86);
+INSERT INTO sc
+	VALUES (3, '002', 85);
+INSERT INTO sc
+	VALUES (4, '001', 95);
+INSERT INTO sc
+	VALUES (4, '002', 97);
 
-create table teacher(--教师表
-	tid number(20),--老师号
-    tname varchar2(10)--老师名
+CREATE TABLE teacher (
+	--教师表
+	tid NUMBER(
+	20
+),--老师号
+    tname VARCHAR2(10)--老师名
 );
 
---1、查询“001”课程比“002”课程成绩高的所有学生的学号； 
+--1、查询“001”课程比“002”课程成绩高的所有学生的学号；
 SELECT a.sid
-FROM   (SELECT score,sid
-		FROM   sc
-		WHERE cid = '001') a,
-	   (SELECT score,sid
-		FROM   sc
-		WHERE  cid = '002') b
-WHERE  a.score > b.score
-AND    a.sid = b.sid;
+	FROM (
+		 SELECT score, sid
+			 FROM sc
+			 WHERE cid = '001') a,
+		 (
+		 SELECT score, sid
+			 FROM sc
+			 WHERE cid = '002') b
+	WHERE a.score > b.score
+	  AND a.sid = b.sid;
 
 
---2、查询平均成绩大于60分的同学的学号和平均成绩； 
-SELECT sid AVG(score)
-FROM   sc
-GROUP  BY sid
-HAVING AVG(score) > 60;	
+--2、查询平均成绩大于60分的同学的学号和平均成绩；
+SELECT sid avg(score)
+	FROM sc
+	GROUP BY sid
+	HAVING AVG(score) > 60;
 
 
 --3、查询所有同学的学号、姓名、选课数、总成绩； 

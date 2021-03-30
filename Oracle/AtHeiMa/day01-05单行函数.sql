@@ -89,11 +89,13 @@ translate(char using char_cs|nchar_cs)：将char转换为数据库字符集char_
 */
 SELECT translate（ 'SQL*Plus \User''s Guide' ， '* ''\' ， '+-%$#@' ）from dual;
 
-SELECT regexp_substr(' 500 ORACLE PARKWAY,REDWOOD SHORES,CA ', ',[ ^,] +,') "REGEXPR_SUBSTR"from dual;
+SELECT REGEXP_SUBSTR(' 500 ORACLE PARKWAY,REDWOOD SHORES,CA ',',[ ^,] +,') regexpr_substrFROM dual;
 
-SELECT ltrim(' <= == == > BROWNING <= == == > ', ' <> = ') "LTRIM Example" FROM dual;
+SELECT LTRIM(' <= == == > BROWNING <= == == > ',' <> = ') "LTRIM Example"
+	FROM dual;
 
-SELECT rtrim(' <= == == > BROWNING <= == == > ', ' <> = ') "LTRIM Example" FROM dual;
+SELECT RTRIM(' <= == == > BROWNING <= == == > ',' <> = ') "LTRIM Example"
+	FROM dual;
 
 /*
 ltrim example
@@ -101,19 +103,29 @@ ltrim example
 browning<=====>
 */
 
-SELECT REPLACE(' JACK AND JUE ', ' J ', ' BL ') "Changes" FROM dual;
+SELECT REPLACE(' JACK AND JUE ',' J ',' BL ') changes
+	FROM dual;
 
-SELECT concat(' HELLO ', ' WORLD ') FROM dual;
+SELECT CONCAT(' HELLO ',' WORLD ')
+	FROM dual;
 
-SELECT upper(' YES ') FROM dual; --输出yes
+SELECT UPPER(' YES ')
+	FROM dual;
+--输出yes
 
-SELECT lower(' YES ') FROM dual; --输出yes
+SELECT LOWER(' YES ')
+	FROM dual;
+--输出yes
 
-SELECT initcap(' YES YOU ARE A GOOD MAN ') FROM dual; --输出yes
+SELECT initcap(' YES YOU ARE A GOOD MAN ')
+	FROM dual;
+--输出yes
 
-SELECT nls_lower(' LIVE OIL ', ' NLS_SORT = XTURKISH ') "Lowercase" FROM dual;
+SELECT nls_lower(' LIVE OIL ',' NLS_SORT = XTURKISH ') lowercase
+	FROM dual;
 
-SELECT chr(41378) FROM dual;
+SELECT chr(41378)
+	FROM dual;
 
 --返回数值的字符函数
 /*
@@ -139,12 +151,15 @@ regexp_instr(source_char,pattern[,position,occurrence,return_opt(0|1),subexpr])�
        在source_char中第position位开始，第occurrence[+0|+1]次出现的位置索引。
 */
 
-SELECT regexp_instr('500 Oracle Parkway, Redwood Shores, CA', '[^ ]+', 1, 6, 1) "REGEXP_INSTR"
-FROM   dual;
+SELECT REGEXP_INSTR('500 Oracle Parkway, Redwood Shores, CA','[^ ]+',1,6,1) regexp_instr
+	FROM dual;
 
-SELECT ascii('a') FROM dual; --97
+SELECT ASCII('a')
+	FROM dual;
+--97
 
-SELECT instr('cvabcabcabc', 'abc', 1, 2) FROM dual;
+SELECT INSTR('cvabcabcabc','abc',1,2)
+	FROM dual;
 
 --字符集函数——返回字符设置的信息
 /*
@@ -155,9 +170,13 @@ nls_charset_id(string)：返回与字符集名称string对应的字符集id号�
 nls_charset_name(number)：返回与字符集idnumber对应的字符集名称。
 
 */
-SELECT nls_charset_id('US7ASCII') FROM dual; --1
+SELECT nls_charset_id('US7ASCII')
+	FROM dual;
+--1
 
-SELECT nls_charset_name(1) FROM dual; --us7ascii
+SELECT nls_charset_name(1)
+	FROM dual;
+--us7ascii
 
 --排序函数——返回排序设置的有关信息【12c版本新增】
 /*
@@ -167,13 +186,19 @@ nls_collation_name(expr[,flag])：将排序规则的id号作为参数expr,返回
        可选参数flag可以为s|s 返回归类名称的缩写形式，l|l 返回归类名称的长格式。
 */
 
-SELECT nls_collation_name(81919) FROM dual;
+SELECT nls_collation_name(81919)
+	FROM dual;
 
-CREATE TABLE id_table("NAME" VARCHAR2(64), "ID" VARCHAR2(8));
+CREATE TABLE id_table (
+	name VARCHAR2 (64),
+	id VARCHAR2 (8)
+);
 
-INSERT INTO id_table VALUES ('Christopher', 'ABCD1234');
+INSERT INTO id_table
+	VALUES ('Christopher', 'ABCD1234');
 
-SELECT collation(NAME), collation(id) FROM id_table;
+SELECT COLLATION(name), COLLATION(id)
+	FROM id_table;
 
 --数值函数
 /*
@@ -273,21 +298,22 @@ tz_offset({ 'time_zone_name'
 
 WITH dates AS
  (SELECT DATE '2020-01-01' d
-  FROM   dual
+  FROM   DUAL
   UNION
   SELECT DATE '2020-01-10' d
-  FROM   dual
+  FROM   DUAL
   UNION
   SELECT DATE '2020-02-01' d
-  FROM   dual
+  FROM   DUAL
   UNION
-  SELECT timestamp'2020-03-03 23:45:00' d
-  FROM   dual
+  SELECT TIMESTAMP'2020-03-03 23:45:00' d
+  FROM   DUAL
   UNION
-  SELECT timestamp'2020-04-11 12:34:56' d
-  FROM   dual)
-SELECT d "Original Date", trunc(d) "Nearest Day, Time Removed", trunc(d, 'ww') "Nearest Week", trunc(d, 'iw') "Start of Week", trunc(d, 'mm') "Start of Month", trunc(d, 'year') "Start of Year"
-FROM   dates;
+  SELECT TIMESTAMP'2020-04-11 12:34:56' d
+  FROM   DUAL)
+SELECT d "Original Date", trunc(d) "Nearest Day, Time Removed", trunc(d,'ww') "Nearest Week", trunc(d,'iw') "Start of Week",
+	   trunc(d,'mm') "Start of Month", trunc(d,'year') "Start of Year"
+	FROM dates;
 
 --一般比较函数
 /*

@@ -1,4 +1,3 @@
-
 --记录类型
 /*
 记录类型是把
@@ -11,17 +10,16 @@ DECLARE
 		v_salary    employees.salary%TYPE,
 		v_email     employees.email%TYPE,
 		v_hire_date employees.hire_date%TYPE);
-	--定义一个记录类型的成员变量
+--定义一个记录类型的成员变量
 	v_emp_record emp_record;
-BEGIN
-	--SQL语句的操作：select...into...from...where...
+BEGIN --SQL语句的操作：select...into...from...where...
 	SELECT salary,
 		   email,
 		   hire_date
 	INTO   v_emp_record
 	FROM   employees
 	WHERE  employee_id = 100;
-	--打印输出语句
+--打印输出语句
 	dbms_output.put_line(v_emp_record.v_salary || ',' || v_emp_record.v_email || ',' ||
 						 v_emp_record.v_hire_date);
 END;
@@ -70,23 +68,22 @@ END;
 DECLARE
 	--变量、记录类型等的声明
 	v_sal       NUMBER(8, 2) := 0;
-	v_emp_id    NUMBER(10);
-	v_email     VARCHAR2(20);
-	v_hire_date DATE);
+v_emp_id    NUMBER(10);
+v_email     VARCHAR2(20);
+v_hire_date DATE);
 
-BEGIN
-	--程序执行部分
-	SELECT salary,
-		   employee_id,
-		   email,
-		   hire_date
-	INTO   v_sal,
-		   v_emp_id,
-		   v_email,
-		   v_hire_date
-	FROM   employees
-	WHERE  employee_id = 123;
-	dbms_output.put_line('Employee_id: ' || v_emp_id || ' Salary: ' || v_sal || ' Email: ' ||
+BEGIN --程序执行部分
+SELECT salary,
+	   employee_id,
+	   email,
+	   hire_date
+	INTO v_sal,
+		v_emp_id,
+		v_email,
+		v_hire_date
+	FROM employees
+	WHERE employee_id = 123;
+dbms_output.put_line('Employee_id: ' || v_emp_id || ' Salary: ' || v_sal || ' Email: ' ||
 						 v_email || ' Hire_date: ' || v_hire_date);
 END;
 
@@ -107,18 +104,17 @@ DECLARE
 		v_emp_id    NUMBER(10),
 		v_email     VARCHAR2(20),
 		v_hire_date DATE);
-	--个记录类型的变量
+--个记录类型的变量
 	v_emp_record emp_record;
-BEGIN
-	--程序执行部分
-	SELECT salary,
-		   employee_id,
-		   email,
-		   hire_date
-	INTO   v_emp_record
-	FROM   employees
-	WHERE  employee_id = 123;
-	dbms_output.put_line('Employee_id: ' || v_emp_record.v_emp_id || ' Salary: ' ||
+BEGIN --程序执行部分
+SELECT salary,
+	   employee_id,
+	   email,
+	   hire_date
+	INTO v_emp_record
+	FROM employees
+	WHERE employee_id = 123;
+dbms_output.put_line('Employee_id: ' || v_emp_record.v_emp_id || ' Salary: ' ||
 						 v_emp_record.v_sal || ' Email: ' || v_emp_record.v_email ||
 						 ' Hire_date: ' || v_emp_record.v_hire_date);
 END;
@@ -128,25 +124,23 @@ DECLARE
 	TYPE salary_record IS RECORD(
 		v_name   VARCHAR2(20),
 		v_salary NUMBER(10, 2));
-	v_salary_record salary_record;
-BEGIN
-	v_salary_record.v_name   := '刘德华';
-	v_salary_record.v_salary := 120000;
-	dbms_output.put_line('Name: ' || v_salary_record.v_name || ' Salary: ' ||
+v_salary_record salary_record;
+BEGIN v_salary_record.v_name   := '刘德华';
+v_salary_record.v_salary := 120000;
+dbms_output.put_line('Name: ' || v_salary_record.v_name || ' Salary: ' ||
 						 v_salary_record.v_salary);
 END;
 
 --自定义表的全部列
 DECLARE
 	v_emp_record employees%ROWTYPE;
-	v_emp_id     NUMBER(10);
-BEGIN
-	v_emp_id := 123;
-	SELECT *
-	INTO   v_emp_record
-	FROM   employees
-	WHERE  employee_id = v_emp_id;
-	dbms_output.put_line('Employee_id: ' || v_emp_record.employee_id || ' Salary:' ||
+v_emp_id     NUMBER(10);
+BEGIN v_emp_id := 123;
+SELECT *
+	INTO v_emp_record
+	FROM employees
+	WHERE employee_id = v_emp_id;
+dbms_output.put_line('Employee_id: ' || v_emp_record.employee_id || ' Salary:' ||
 						 v_emp_record.salary || ' Email:' || v_emp_record.email);
 END;
 
@@ -154,12 +148,12 @@ END;
 DECLARE
 	v_emp_id NUMBER(10);
 
-BEGIN
-	v_emp_id := 123;
-	UPDATE employees
-	SET    salary = salary + 100
-	WHERE  employee_id = v_emp_id;
-	dbms_output.put_line('执行成功');
+BEGIN v_emp_id := 123;
+UPDATE employees
+SET
+	salary = salary + 100
+	WHERE employee_id = v_emp_id;
+dbms_output.put_line('执行成功');
 END;
 
 ROLLBACK;

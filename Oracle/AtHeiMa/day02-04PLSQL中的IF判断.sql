@@ -3,12 +3,11 @@
 
 DECLARE
 	i NUMBER(3) := &ii;
-BEGIN
-	IF i < 18 THEN
+BEGIN IF i < 18 THEN
 		dbms_output.put_line('未成年');
-	ELSIF i < 40 THEN
+ELSIF i < 40 THEN
 		dbms_output.put_line('中年人');
-	ELSE
+ELSE
 		dbms_output.put_line('老年人');
-	END IF;
+END IF;
 END;

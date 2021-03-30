@@ -7,33 +7,37 @@ SELECT *
 FROM   scott.emp;*/
 
 SELECT *
-FROM   emp;
+	FROM emp;
 
 --创建视图[必须有dba权限]
-CREATE view v_emp AS
+CREATE VIEW v_emp
+AS
 	SELECT ename,
 		   job
-	FROM   emp;
+		FROM emp;
 
 --查询视图
 SELECT *
-FROM   v_emp;
+	FROM v_emp;
 
 --修改视图[能修改但不推荐]
 UPDATE v_emp
-SET    job = 'CLERK'
-WHERE  ename = 'ALLEN';
+SET
+	job = 'CLERK'
+	WHERE ename = 'ALLEN';
 COMMIT;
 
 --创建只读视图
-CREATE view v_emp1 AS
+CREATE VIEW v_emp1
+AS
 	SELECT ename,
 		   job
-	FROM   emp WITH READ ONLY;
+		FROM emp
+WITH READ ONLY;
 
 ----视图的作用？
 --①视图可以屏蔽掉一些敏感的字段。
 --②保证总部和分部数据及时统一。
 
 SELECT *
-FROM   v_emp1;
+	FROM v_emp1;

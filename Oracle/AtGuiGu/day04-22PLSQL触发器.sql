@@ -86,42 +86,53 @@ AFTER DELETE FOR EACH ROW
 
 --创建一个触发器
 --一个helloworld级别的触发器
-CREATE OR REPLACE TRIGGER update_emp_trigger
-AFTER UPDATE ON employees
-FOR EACH ROW
-BEGIN
-	dbms_output.put_line('HelloWorld');
+CREATE OR
+REPLACE trigger update_emp_trigger
+	AFTER
+UPDATE on employees
+	FOR EACH ROW
+BEGIN dbms_output.put_line('HelloWorld');
 END;
 --然后执行：
-UPDATE employees SET salary = salary + 1000;
+UPDATE employees
+SET
+	salary = salary + 1000;
 ROLLBACK;
 
 
 --28. 触发器的 helloworld: 编写一个触发器, 在向 emp 表中插入记录时, 打印 'helloworld'
 
-CREATE OR REPLACE TRIGGER emp_trigger
-	AFTER INSERT ON emp
+CREATE OR
+REPLACE trigger emp_trigger
+	AFTER
+INSERT on emp
 	FOR EACH ROW
-BEGIN
-	dbms_output.put_line('helloworld');
+BEGIN dbms_output.put_line('helloworld');
 END;
 
 --29. 行级触发器: 每更新 employees 表中的一条记录, 都会导致触发器执行
 
-CREATE OR REPLACE TRIGGER employees_trigger
-	AFTER UPDATE ON employees
+CREATE OR
+REPLACE trigger employees_trigger
+	AFTER
+UPDATE on employees
 	FOR EACH ROW
-BEGIN
-	dbms_output.put_line('修改了一条记录!');
+BEGIN dbms_output.put_line('修改了一条记录!');
 END;
 
 
---语句级触发器: 一个 update/delete/insert 语句只使触发器执行一次
+--语句级触发器: 一个
+UPDATE /
+DELETE /
+INSERT
+语句只使触发器执行一次
 
-CREATE OR REPLACE TRIGGER employees_trigger
-	AFTER UPDATE ON employees
-BEGIN
-	dbms_output.put_line('修改了一条记录!');
+CREATE
+OR
+REPLACE trigger employees_trigger
+	AFTER
+UPDATE on employees
+BEGIN dbms_output.put_line('修改了一条记录!');
 END;
 
 
@@ -156,23 +167,29 @@ OLD  NULL  有效  有效
 NEW  有效  有效  NULL
 */
 --复制一张表
-create table emp1 as
-select * from employees
-where department_id = 80;
+CREATE TABLE emp1
+AS
+	SELECT *
+		FROM employees
+		WHERE department_id = 80;
 
---30. 使用 :new, :old 修饰符
-SELECT * FROM emp1;
+--30. 使用 :new, :OLD 修饰符
+SELECT *
+	FROM emp1;
 
-CREATE OR REPLACE TRIGGER update_emp1_trigger
-	AFTER UPDATE ON emp1
+CREATE
+OR
+REPLACE trigger update_emp1_trigger
+	AFTER
+UPDATE on emp1
 	FOR EACH ROW
-BEGIN
-	dbms_output.put_line('Old:Salary: ' || :old.salary || ', New:Salry: ' || :new.salary);
+BEGIN dbms_output.put_line('Old:Salary: ' || :OLD.salary || ', New:Salry: ' || :new.salary);
 END;
 
 --修改salary触发触发器。
 UPDATE emp1
-SET    salary = salary + 100;
+SET
+	salary = salary + 100;
 
 
 
@@ -335,19 +352,27 @@ ALTER TABLE emp DISABLE ALL TRIGGERS;
 --31. 编写一个触发器, 在对 my_emp 记录进行删除的时候, 在 my_emp_bak 表中备份对应的记录
 
 --1). 准备工作:
-create table my_emp as select employee_id id, last_name name, salary sal from employees;
-    
-create table my_emp_bak as select employee_id id, last_name name, salary sal from employees where 1 = 2;
+CREATE TABLE my_emp
+AS
+	SELECT employee_id id, last_name name, salary sal
+		FROM employees;
+
+CREATE TABLE my_emp_bak
+AS
+	SELECT employee_id id, last_name name, salary sal
+		FROM employees
+		WHERE 1 = 2;
 
 --2). 
-CREATE OR REPLACE TRIGGER bak_emp_trigger
-	BEFORE DELETE ON my_emp
+CREATE OR
+REPLACE trigger bak_emp_trigger
+	BEFORE
+DELETE on my_emp
 	FOR EACH ROW
 
 BEGIN
-	INSERT INTO my_emp_bak
-	VALUES
-		(:old.id,
-		 :old.name,
-		 :old.sal);
+INSERT INTO my_emp_bak
+	VALUES (:old.id,
+			:old.name,
+			:old.sal);
 END;

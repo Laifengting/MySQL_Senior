@@ -61,27 +61,23 @@ USE girls;
 */
 USE myemployees;
 
-SELECT
-    last_name,
-    department_name
-FROM
-    employees e
-    INNER JOIN departments d
-        ON e.department_id = d.department_id;
+SELECT last_name,
+	   department_name
+	FROM employees         e
+	INNER JOIN departments d
+			   ON e.department_id = d.department_id;
 
 /*
 		案例2.1.1.2：查询名字中包含e的员工名和工种名(添加筛选)
 */
 USE myemployees;
 
-SELECT
-    last_name,
-    job_title
-FROM
-    employees e
-    INNER JOIN jobs j
-        ON e.job_id = j.job_id
-WHERE last_name LIKE '%e%';
+SELECT last_name,
+	   job_title
+	FROM employees  e
+	INNER JOIN jobs j
+			   ON e.job_id = j.job_id
+	WHERE last_name LIKE '%e%';
 
 /*
 		案例2.1.1.3：查询部门个数>3的城市名和部门个数(添加分组+筛选)
@@ -91,15 +87,13 @@ WHERE last_name LIKE '%e%';
 */
 USE myemployees;
 
-SELECT
-    city,
-    COUNT(*) 部门个数
-FROM
-    locations l
-    INNER JOIN departments d
-        ON l.location_id = d.location_id
-GROUP BY city
-HAVING COUNT(*) > 3;
+SELECT city,
+	   COUNT(*) 部门个数
+	FROM locations         l
+	INNER JOIN departments d
+			   ON l.location_id = d.location_id
+	GROUP BY city
+	HAVING COUNT(*) > 3;
 
 /*
 		案例2.1.1.4：查询哪个部门的部门员工个数>3的部门名和员工个数，并按个数降序(排序)
@@ -109,33 +103,29 @@ HAVING COUNT(*) > 3;
 */
 USE myemployees;
 
-SELECT
-    COUNT(*) 个数,
-    department_name
-FROM
-    employees e
-    INNER JOIN departments d
-        ON e.department_id = d.department_id
-GROUP BY department_name
-HAVING COUNT(*) > 3
-ORDER BY COUNT(*) DESC;
+SELECT COUNT(*) 个数,
+	   department_name
+	FROM employees         e
+	INNER JOIN departments d
+			   ON e.department_id = d.department_id
+	GROUP BY department_name
+	HAVING COUNT(*) > 3
+	ORDER BY COUNT(*) DESC;
 
 /*
 		案例2.1.1.5：查询员工名、部门名、工种名，并按部门名降序
 */
 USE myemployees;
 
-SELECT
-    last_name,
-    department_name,
-    job_title
-FROM
-    employees e
-    INNER JOIN departments d
-        ON e.department_id = d.department_id
-    INNER JOIN jobs j
-        ON j.job_id = e.job_id
-ORDER BY department_name DESC;
+SELECT last_name,
+	   department_name,
+	   job_title
+	FROM employees         e
+	INNER JOIN departments d
+			   ON e.department_id = d.department_id
+	INNER JOIN jobs        j
+			   ON j.job_id = e.job_id
+	ORDER BY department_name DESC;
 
 /*
 		2.1.2. 非等值连接
@@ -143,31 +133,27 @@ ORDER BY department_name DESC;
 */
 USE myemployees;
 
-SELECT
-    salary,
-    grade_level
-FROM
-    employees e
-    INNER JOIN job_grades j
-        ON salary BETWEEN lowest_sal
-        AND highest_sal;
+SELECT salary,
+	   grade_level
+	FROM employees        e
+	INNER JOIN job_grades j
+			   ON salary BETWEEN lowest_sal
+				   AND highest_sal;
 
 /*
 		案例2.1.2.2 查询每个工资级别的个数大于2的个数，并且按工资级别降序排序
 */
 USE myemployees;
 
-SELECT
-    COUNT(*),
-    grade_level
-FROM
-    employees e
-    INNER JOIN job_grades j
-        ON salary BETWEEN j.lowest_sal
-        AND j.highest_sal
-GROUP BY grade_level
-HAVING COUNT(*) > 20
-ORDER BY grade_level DESC;
+SELECT COUNT(*),
+	   grade_level
+	FROM employees        e
+	INNER JOIN job_grades j
+			   ON salary BETWEEN j.lowest_sal
+				   AND j.highest_sal
+	GROUP BY grade_level
+	HAVING COUNT(*) > 20
+	ORDER BY grade_level DESC;
 
 /*
 		2.1.3. 自连接
@@ -175,14 +161,12 @@ ORDER BY grade_level DESC;
 */
 USE myemployees;
 
-SELECT
-    e.last_name,
-    m.last_name
-FROM
-    employees e
-    INNER JOIN employees m
-        ON e.manager_id = m.employee_id
-WHERE e.last_name LIKE '%k%';
+SELECT e.last_name,
+	   m.last_name
+	FROM employees       e
+	INNER JOIN employees m
+			   ON e.manager_id = m.employee_id
+	WHERE e.last_name LIKE '%k%';
 
 /*
 		2.2 外连接
@@ -204,15 +188,11 @@ WHERE e.last_name LIKE '%k%';
 */
 USE girls;
 
-SELECT
-    *
-FROM
-    beauty;
+SELECT *
+	FROM beauty;
 
-SELECT
-    *
-FROM
-    boys;
+SELECT *
+	FROM boys;
 
 /*	
 		2.2.1. 左外连接
@@ -220,16 +200,14 @@ FROM
 */
 USE girls;
 
-SELECT
-    b.`name`
-FROM
-    beauty b
-    LEFT OUTER JOIN boys bo
-        ON bo.id = b.boyfriend_id
-        /*
+SELECT b.name
+	FROM beauty          b
+	LEFT OUTER JOIN boys bo
+					ON bo.id = b.boyfriend_id
+		/*
 		一般筛选条件选择主键来筛选，因为主键不能为空。
 */
-WHERE bo.id IS NULL;
+	WHERE bo.id IS NULL;
 
 /*	
 		2.2.2. 右外连接
@@ -237,63 +215,53 @@ WHERE bo.id IS NULL;
 */
 USE girls;
 
-SELECT
-    b.`name`
-FROM
-    boys bo
-    RIGHT
-    OUTER JOIN beauty b
-        ON bo.id = b.boyfriend_id
-        /*
+SELECT b.name
+	FROM boys               bo
+	RIGHT OUTER JOIN beauty b
+					 ON bo.id = b.boyfriend_id
+		/*
 		一般筛选条件选择主键来筛选，因为主键不能为空。
 */
-WHERE bo.id IS NULL;
+	WHERE bo.id IS NULL;
 
 /*	
 		案例2.2.1.2：查询男朋友不在男神表的女神名【左外连接-主从表调换】
 */
 USE girls;
 
-SELECT
-    b.*,
-    bo.*
-FROM
-    boys bo
-    LEFT OUTER JOIN beauty b
-        ON b.`boyfriend_id` = bo.`id`
-        /*
-        一般筛选条件选择主键来筛选，因为主键不能为空。
+SELECT b.*,
+	   bo.*
+	FROM boys              bo
+	LEFT OUTER JOIN beauty b
+					ON b.boyfriend_id = bo.id
+		/*
+		一般筛选条件选择主键来筛选，因为主键不能为空。
 */
-WHERE b.`id` IS NULL;
+	WHERE b.id IS NULL;
 
 /*	
 		案例2.2.1.3：查询哪个部门没有员工【左外连接】
 */
 USE myemployees;
 
-SELECT
-    d.*,
-    e.employee_id
-FROM
-    departments d
-    LEFT OUTER JOIN employees e
-        ON d.`department_id` = e.`department_id`
-WHERE e.`employee_id` IS NULL;
+SELECT d.*,
+	   e.employee_id
+	FROM departments          d
+	LEFT OUTER JOIN employees e
+					ON d.department_id = e.department_id
+	WHERE e.employee_id IS NULL;
 
 /*	
 		案例2.2.2.2：查询哪个部门没有员工【右外连接】
 */
 USE myemployees;
 
-SELECT
-    d.*,
-    e.employee_id
-FROM
-    employees e
-    RIGHT
-    OUTER JOIN departments d
-        ON d.`department_id` = e.`department_id`
-WHERE e.`employee_id` IS NULL;
+SELECT d.*,
+	   e.employee_id
+	FROM employees               e
+	RIGHT OUTER JOIN departments d
+					 ON d.department_id = e.department_id
+	WHERE e.employee_id IS NULL;
 
 /*	
 		2.2.3. 全外连接
@@ -325,34 +293,27 @@ WHERE e.`employee_id` IS NULL;
 */
 USE girls;
 
-SELECT
-    b.*,
-    bo.*
-FROM
-    beauty b FULL
+SELECT b.*,
+	   bo.*
+	FROM beauty b FULL
     OUTER JOIN boys bo
-        ON b.`boyfriend_id` = bo.id
-        /*
-		全外连接通过UNION实现
+ON b.`boyfriend_id` = bo.id
+/*
+全外连接通过UNION实现
 */
-        USE girls;
+USE girls;
 
-SELECT
-    b.*,
-    bo.*
-FROM
-    beauty b
-    LEFT OUTER JOIN boys bo
-        ON b.`boyfriend_id` = bo.`id`
+SELECT b.*,
+	   bo.*
+	FROM beauty          b
+	LEFT OUTER JOIN boys bo
+					ON b.boyfriend_id = bo.id
 UNION
-SELECT
-    b.*,
-    bo.*
-FROM
-    beauty b
-    RIGHT
-    OUTER JOIN boys bo
-        ON b.`boyfriend_id` = bo.`id`;
+SELECT b.*,
+	   bo.*
+	FROM beauty           b
+	RIGHT OUTER JOIN boys bo
+					 ON b.boyfriend_id = bo.id;
 
 /*
 		2.3 交叉连接
@@ -368,24 +329,18 @@ FROM
 			
 		功能：使用SQL99语法标准，对表1和表2实现笛卡尔乘积
 */
-SELECT
-    *
-FROM
-    beauty;
+SELECT *
+	FROM beauty;
 
-SELECT
-    *
-FROM
-    boys;
+SELECT *
+	FROM boys;
 
 USE girls;
 
-SELECT
-    b.*,
-    bo.*
-FROM
-    beauty b
-    CROSS JOIN boys bo;
+SELECT b.*,
+	   bo.*
+	FROM beauty     b
+	CROSS JOIN boys bo;
 
 /*
 		SQL92 和 SQL99 对比

@@ -19,22 +19,24 @@
 --使用传统方式来实现案例需求
 SELECT e.ename,
 	   d.dname
-FROM   emp  e,
-	   dept d
-WHERE  e.deptno = d.deptno;
+	FROM emp  e,
+		 dept d
+	WHERE e.deptno = d.deptno;
 
 --使用存储函数自定义函数来实现案例需求。
 
 --【案例】使用存储函数来实现提供一个部门编号，输出一个部门名称
-CREATE OR REPLACE FUNCTION my_function(dno IN dept.deptno%TYPE) RETURN dept.dname%TYPE AS
+CREATE OR
+REPLACE function my_function(dno IN dept.deptno%TYPE) RETURN dept.dname%TYPE AS
 	dna dept.dname%TYPE;
 BEGIN
-	SELECT dname
-	INTO   dna
-	FROM   dept
-	WHERE  deptno = dno;
-	RETURN dna;
+SELECT dname
+	INTO dna
+	FROM dept
+	WHERE deptno = dno;
+RETURN dna;
 END;
 
-	--使用my_function存储函数来实现案例需求:查询出员工姓名，员工所有部门名称。
-SELECT e.ename, my_function(e.deptno) "部门名称" FROM emp e;
+--使用my_function存储函数来实现案例需求:查询出员工姓名，员工所有部门名称。
+SELECT e.ename, my_function(e.deptno) 部门名称
+	FROM emp e;

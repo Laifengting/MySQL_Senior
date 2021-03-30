@@ -41,18 +41,18 @@
 		
 */
 SELECT *
-FROM beauty;
+	FROM beauty;
 SELECT *
-FROM boys;
-SELECT `name`,
-       boyName
-FROM boys,
-     beauty;
-SELECT `name`,
-       boyName
-FROM boys,
-     beauty
-WHERE beauty.boyfriend_id = boys.id;
+	FROM boys;
+SELECT name,
+	   boyname
+	FROM boys,
+		 beauty;
+SELECT name,
+	   boyname
+	FROM boys,
+		 beauty
+	WHERE beauty.boyfriend_id = boys.id;
 /*
 		一、 SQL92标准
 */
@@ -67,19 +67,19 @@ WHERE beauty.boyfriend_id = boys.id;
 		案例1.1.1：查询女神名和对应的男神名
 		
 */
-SELECT `name`,
-       boyName
-FROM boys,
-     beauty
-WHERE beauty.boyfriend_id = boys.id;
+SELECT name,
+	   boyname
+	FROM boys,
+		 beauty
+	WHERE beauty.boyfriend_id = boys.id;
 /*
 		案例1.1.2：查询员工名和对应的部门名
 */
 SELECT last_name,
-       department_name
-FROM departments,
-     employees
-WHERE employees.department_id = departments.department_id;
+	   department_name
+	FROM departments,
+		 employees
+	WHERE employees.department_id = departments.department_id;
 /*
 		1.2. 为表起别名
 		优点：① 提高语句的简洁度
@@ -88,110 +88,110 @@ WHERE employees.department_id = departments.department_id;
 		案例1.2.1：查询员工名、工种号、工种名
 */
 SELECT last_name,
-       e.job_id,
-       j.job_title
-FROM employees AS e,
-     jobs AS j
-WHERE e.job_id = j.job_id;
+	   e.job_id,
+	   j.job_title
+	FROM employees AS e,
+		 jobs      AS j
+	WHERE e.job_id = j.job_id;
 /*
 		1.3. 两个表的顺序可以调换
 		案例：查询员工名、工种号、工种名
 */
 SELECT last_name,
-       e.job_id,
-       j.job_title
-FROM jobs AS j,
-     employees AS e
-WHERE e.job_id = j.job_id;
+	   e.job_id,
+	   j.job_title
+	FROM jobs      AS j,
+		 employees AS e
+	WHERE e.job_id = j.job_id;
 /*
 		1.4. 可以加筛选
 		案例1.4.1：查询有奖金的员工名，部门名。
 */
 SELECT last_name,
-       department_name,
-       commission_pct
-FROM employees AS e,
-     departments AS d
-WHERE e.department_id = d.department_id
-  AND e.commission_pct IS NOT NULL;
+	   department_name,
+	   commission_pct
+	FROM employees   AS e,
+		 departments AS d
+	WHERE e.department_id = d.department_id
+	  AND e.commission_pct IS NOT NULL;
 /*
 		案例1.4.2：查询城市名中第二个字符为o的部门名和城市名
 */
 SELECT department_name,
-       city
-FROM departments AS d,
-     locations AS l
-WHERE d.location_id = l.location_id -- 先添加连接条件
+	   city
+	FROM departments AS d,
+		 locations   AS l
+	WHERE d.location_id = l.location_id -- 先添加连接条件
 
-  AND city LIKE '_o%';
+	  AND city LIKE '_o%';
 -- 再添加筛选条件
 /*
 		1.5. 可以加分组
 		案例1.5.1：查询每个城市的部门个数
 */
 SELECT city,
-       COUNT(*) AS 个数
-FROM departments AS d,
-     locations AS l
-WHERE d.location_id = l.location_id
-GROUP BY city;
+	   COUNT(*) 个数
+	FROM departments AS d,
+		 locations   AS l
+	WHERE d.location_id = l.location_id
+	GROUP BY city;
 /*
 		案例1.5.2：查询有奖金的每个部门的部门名和部门的领导编号和该部门的最低工资
 */
 SELECT department_name,
-       d.manager_id,
-       MIN(salary)
-FROM departments AS d,
-     employees AS e
-WHERE d.department_id = e.department_id
-  AND commission_pct IS NOT NULL
-GROUP BY department_name,
-         d.manager_id;
+	   d.manager_id,
+	   MIN(salary)
+	FROM departments AS d,
+		 employees   AS e
+	WHERE d.department_id = e.department_id
+	  AND commission_pct IS NOT NULL
+	GROUP BY department_name,
+			 d.manager_id;
 /*
 		1.6. 可以加排序
 		案例：查询每个工种的工种名和员工的个数，并且按员工个数降序
 */
 SELECT job_title,
-       COUNT(*)
-FROM jobs AS j,
-     employees AS e
-WHERE j.job_id = e.job_id
-GROUP BY job_title
-ORDER BY COUNT(*) DESC;
+	   COUNT(*)
+	FROM jobs      AS j,
+		 employees AS e
+	WHERE j.job_id = e.job_id
+	GROUP BY job_title
+	ORDER BY COUNT(*) DESC;
 /*
 		1.7. 实现多表连接
 		案例：查询员工名、部门名和所在的城市
 */
 SELECT last_name,
-       department_name,
-       city
-FROM employees e,
-     departments d,
-     locations l
-WHERE e.department_id = d.department_id
-  AND d.location_id = l.location_id
-  AND city LIKE 's%'
-ORDER BY department_name DESC;
+	   department_name,
+	   city
+	FROM employees   e,
+		 departments d,
+		 locations   l
+	WHERE e.department_id = d.department_id
+	  AND d.location_id = l.location_id
+	  AND city LIKE 's%'
+	ORDER BY department_name DESC;
 /*
 		2. 内连接——非等值连接
 		案例：查询员工的工资和工资级别
 */
 SELECT salary,
-       grade_level
-FROM employees e,
-     job_grades j
-WHERE salary BETWEEN j.lowest_sal
-	AND j.highest_sal
-  AND j.grade_level = 'A';
+	   grade_level
+	FROM employees  e,
+		 job_grades j
+	WHERE salary BETWEEN j.lowest_sal
+		AND j.highest_sal
+	  AND j.grade_level = 'A';
 /*
 		3. 内连接——自连接
 		案例：查询员工名和上级的名称
 */
 SELECT e1.employee_id,
-       e1.last_name,
-       e2.employee_id,
-       e2.last_name
-FROM employees e1,
-     employees e2
-WHERE e1.manager_id = e2.employee_id;
+	   e1.last_name,
+	   e2.employee_id,
+	   e2.last_name
+	FROM employees e1,
+		 employees e2
+	WHERE e1.manager_id = e2.employee_id;
 

@@ -1372,24 +1372,31 @@ CREATE TABLE test_innodb_lock (
 	ENGINE = innodb;
 
 # 插入数据
-INSERT INTO test_innodb_lock VALUES(1,'b2');
-INSERT INTO test_innodb_lock VALUES(3,'3');
-INSERT INTO test_innodb_lock VALUES(4,'4000');
-INSERT INTO test_innodb_lock VALUES(5,'5000');
-INSERT INTO test_innodb_lock VALUES(6,'6000');
-INSERT INTO test_innodb_lock VALUES(7,'7000');
-INSERT INTO test_innodb_lock VALUES(8,'8000');
-INSERT INTO test_innodb_lock VALUES(9,'9000');
-INSERT INTO test_innodb_lock VALUES(1,'b1');
+INSERT INTO test_innodb_lock
+	VALUES (1, 'b2');
+INSERT INTO test_innodb_lock
+	VALUES (3, '3');
+INSERT INTO test_innodb_lock
+	VALUES (4, '4000');
+INSERT INTO test_innodb_lock
+	VALUES (5, '5000');
+INSERT INTO test_innodb_lock
+	VALUES (6, '6000');
+INSERT INTO test_innodb_lock
+	VALUES (7, '7000');
+INSERT INTO test_innodb_lock
+	VALUES (8, '8000');
+INSERT INTO test_innodb_lock
+	VALUES (9, '9000');
+INSERT INTO test_innodb_lock
+	VALUES (1, 'b1');
 
 # 创建索引
 CREATE INDEX idx_test_innodb_a_ind ON test_innodb_lock(a);
 CREATE INDEX idx_test_innodb_b_ind ON test_innodb_lock(b);
 
-
-
 # 关闭自动提交。
-SET AUTOCOMMIT=0;
+SET AUTOCOMMIT = 0;
 
 SHOW STATUS LIKE 'innodb_row_lock%';
 

@@ -50,31 +50,30 @@ CLOSE cursor_name;
 --方式一：
 DECLARE
 	v_sal       employees.salary%TYPE;
-	v_last_name employees.last_name%TYPE;
-	--定义游标
+v_last_name employees.last_name%TYPE;
+--定义游标
 	CURSOR emp_sal_cursor IS
-		SELECT salary,
-			   last_name
-		FROM   employees
-		WHERE  department_id = 80;
-BEGIN
-	--打开游标
+SELECT salary,
+	   last_name
+	FROM employees
+	WHERE department_id = 80;
+BEGIN --打开游标
 	OPEN emp_sal_cursor;
 
-	--提取游标
+--提取游标
 	FETCH emp_sal_cursor
 		INTO v_sal,
 			 v_last_name;
 
-	WHILE emp_sal_cursor%FOUND
+WHILE emp_sal_cursor%FOUND
 	LOOP
 		dbms_output.put_line('Name: ' || v_last_name || ', Salary: ' || v_sal);
-		FETCH emp_sal_cursor
+FETCH emp_sal_cursor
 			INTO v_sal,
 				 v_last_name;
-	END LOOP;
+END LOOP;
 
-	--关闭游标
+--关闭游标
 	CLOSE emp_sal_cursor;
 END;
 
@@ -86,33 +85,32 @@ DECLARE
 		v_last_name employees.last_name%TYPE,
 		v_hire_date employees.hire_date%TYPE);
 
-	--声明一个记录类型的变量
+--声明一个记录类型的变量
 	v_emp_record emp_record;
 
-	--定义游标
+--定义游标
 	CURSOR emp_sal_cursor IS
-		SELECT salary,
-			   last_name,
-			   hire_date
-		FROM   employees
-		WHERE  department_id = 80;
-BEGIN
-	--打开游标
+SELECT salary,
+	   last_name,
+	   hire_date
+	FROM employees
+	WHERE department_id = 80;
+BEGIN --打开游标
 	OPEN emp_sal_cursor;
 
-	--提取游标
+--提取游标
 	FETCH emp_sal_cursor
 		INTO v_emp_record;
 
-	WHILE emp_sal_cursor%FOUND
+WHILE emp_sal_cursor%FOUND
 	LOOP
 		dbms_output.put_line('Name: ' || v_emp_record.v_last_name || ', Salary: ' ||
 							 v_emp_record.v_sal || ', Hire_date: ' || v_emp_record.v_hire_date);
-		FETCH emp_sal_cursor
+FETCH emp_sal_cursor
 			INTO v_emp_record;
-	END LOOP;
+END LOOP;
 
-	--关闭游标
+--关闭游标
 	CLOSE emp_sal_cursor;
 END;
 
@@ -120,18 +118,17 @@ END;
 DECLARE
 	--定义游标
 	CURSOR emp_sal_cursor IS
-		SELECT salary,
-			   last_name,
-			   hire_date
-		FROM   employees
-		WHERE  department_id = 80;
-BEGIN
-	--for循环可以自动打开提取关闭游标
+SELECT salary,
+	   last_name,
+	   hire_date
+	FROM employees
+	WHERE department_id = 80;
+BEGIN --for循环可以自动打开提取关闭游标
 	FOR c IN emp_sal_cursor
 	LOOP
 		dbms_output.put_line('Name: ' || c.last_name || ', Salary: ' || c.salary ||
 							 ', Hire_date: ' || c.hire_date);
-	END LOOP;
+END LOOP;
 END;
 
 --14. 利用游标, 调整公司中员工的工资: 
@@ -143,93 +140,93 @@ END;
     15000 -        1%
 */
 --准备新表
-CREATE TABLE employees1 AS
+CREATE TABLE employees1
+AS
 	SELECT *
-	FROM   employees;
+		FROM employees;
 
 SELECT *
-FROM   employees1;
+	FROM employees1;
 --方式一：
 DECLARE
 	--定义游标
 	CURSOR emp_sal_crusor IS
-		SELECT salary,
-			   employee_id
-		FROM   employees;
-	--定义一个调整基数变量    
+SELECT salary,
+	   employee_id
+	FROM employees;
+--定义一个调整基数变量
 	v_temp NUMBER(3,
 				  2);
 
-	--定义存放游标值的变量
+--定义存放游标值的变量
 	v_sal    employees.salary%TYPE;
-	v_emp_id employees.employee_id%TYPE;
+v_emp_id employees.employee_id%TYPE;
 
-BEGIN
-	--打开游标
+BEGIN --打开游标
 	OPEN emp_sal_crusor;
 
-	--提取游标
+--提取游标
 	FETCH emp_sal_crusor
 		INTO v_sal,
 			 v_emp_id;
 
-	WHILE emp_sal_crusor%FOUND
+WHILE emp_sal_crusor%FOUND
 	LOOP
 		IF v_sal > 15000 THEN
 			v_temp := 0.01;
-		ELSIF v_sal >= 10000 THEN
+ELSIF v_sal >= 10000 THEN
 			v_temp := 0.02;
-		ELSIF v_sal >= 5000 THEN
+ELSIF v_sal >= 5000 THEN
 			v_temp := 0.03;
-		ELSE
+ELSE
 			v_temp := 0.05;
-		END IF;
-	
-		UPDATE employees1
-		SET    salary = salary * (1 + v_temp)
-		WHERE  employee_id = v_emp_id;
-	
-		FETCH emp_sal_crusor
+END IF;
+
+UPDATE employees1
+SET
+	salary = salary * (1 + v_temp)
+	WHERE employee_id = v_emp_id;
+
+FETCH emp_sal_crusor
 			INTO v_sal,
 				 v_emp_id;
-	END LOOP;
+END LOOP;
 
-	--关闭游标
+--关闭游标
 	CLOSE emp_sal_crusor;
 END;
 
 SELECT *
-FROM   employees1;
+	FROM employees1;
 
 --方式二：
 DECLARE
 	--定义游标
 	CURSOR emp_sal_crusor IS
-		SELECT salary,
-			   employee_id
-		FROM   employees;
-	--定义一个调整基数变量    
+SELECT salary,
+	   employee_id
+	FROM employees;
+--定义一个调整基数变量
 	v_temp NUMBER(3,
 				  2);
 
-BEGIN
-
-	FOR c IN emp_sal_crusor
+BEGIN FOR c IN emp_sal_crusor
 	LOOP
 		IF c.salary > 15000 THEN
 			v_temp := 0.01;
-		ELSIF c.salary >= 10000 THEN
+ELSIF c.salary >= 10000 THEN
 			v_temp := 0.02;
-		ELSIF c.salary >= 5000 THEN
+ELSIF c.salary >= 5000 THEN
 			v_temp := 0.03;
-		ELSE
+ELSE
 			v_temp := 0.05;
-		END IF;
-	
-		UPDATE employees1
-		SET    salary = salary * (1 + v_temp)
-		WHERE  employee_id = c.employee_id;
-	END LOOP;
+END IF;
+
+UPDATE employees1
+SET
+	salary = salary * (1 + v_temp)
+	WHERE employee_id = c.employee_id;
+END LOOP;
 END;
 
 --16*. 带参数的游标
@@ -241,46 +238,51 @@ DECLARE
 		dept_id NUMBER,
 		sal     NUMBER
 	) IS
-		SELECT salary + 1000 sal,
-			   employee_id id
-		FROM   employees
-		WHERE  department_id = dept_id
-		AND    salary > sal;
+SELECT salary + 1000 sal,
+	   employee_id id
+	FROM employees
+	WHERE department_id = dept_id
+	  AND salary > sal;
 
-	--定义基数变量
+--定义基数变量
 	temp NUMBER(4,
 				2);
-BEGIN
-	--处理游标的循环操作
+BEGIN --处理游标的循环操作
 	FOR c IN emp_sal_cursor(sal     => 4000,
 							dept_id => 80)
 	LOOP
-		--判断员工的工资, 执行 update 操作
-		--dbms_output.put_line(c.id || ': ' || c.sal);
-	
-		IF c.sal <= 5000 THEN
+		--判断员工的工资, 执行
+UPDATE 操作
+	--dbms_output.put_line(c.id || ': ' || c.sal);
+
+IF c.sal <= 5000 THEN
 			temp := 0.05;
-		ELSIF c.sal <= 10000 THEN
+ELSIF c.sal <= 10000 THEN
 			temp := 0.03;
-		ELSIF c.sal <= 15000 THEN
+ELSIF c.sal <= 15000 THEN
 			temp := 0.02;
-		ELSE
+ELSE
 			temp := 0.01;
-		END IF;
-	
-		dbms_output.put_line(c.sal || ': ' || c.id || ', ' || temp);
-		--update employees set salary = salary * (1 + temp) where employee_id = c.id;
-	END LOOP;
+END IF;
+
+dbms_output.put_line(c.sal || ': ' || c.id || ', ' || temp);
+--
+UPDATE employees
+SET
+	salary = salary * (1 + temp)
+	WHERE employee_id = c.id;
+END LOOP;
 END;
 
 --17. 隐式游标: 更新指定员工 salary(涨工资 10)，如果该员工没有找到，则打印”查无此人” 信息
 
 BEGIN
-	UPDATE employees
-	SET    salary = salary + 10
-	WHERE  employee_id = 1005;
+UPDATE employees
+SET
+	salary = salary + 10
+	WHERE employee_id = 1005;
 
-	IF SQL%NOTFOUND THEN
+IF SQL%NOTFOUND THEN
 		dbms_output.put_line('查无此人!');
-	END IF;
+END IF;
 END;

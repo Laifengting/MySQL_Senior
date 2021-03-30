@@ -82,12 +82,15 @@ CALL test_case(95) $
  */
 CREATE FUNCTION test_if(score INT) RETURNS CHAR
 BEGIN
-	IF score >= 90 AND score <= 100 THEN
-		RETURN 'A';
-		ELSEIF score >= 80 THEN
-			RETURN 'B';
-		ELSEIF score >= 60 THEN
-			RETURN 'C';
+	IF score >= 90 AND score <= 100
+		THEN
+			RETURN 'A';
+		ELSEIF score >= 80
+			THEN
+				RETURN 'B';
+		ELSEIF score >= 60
+			THEN
+				RETURN 'C';
 		ELSE
 			RETURN 'D';
 		END IF;
@@ -138,12 +141,13 @@ SELECT test_if(90) $
 USE girls $
 DELIMITER $
 DROP PROCEDURE pro_while1 $
-CREATE PROCEDURE pro_while1(IN insertCount INT)
+CREATE PROCEDURE pro_while1(IN insertcount INT)
 BEGIN
 	DECLARE i INT DEFAULT 1;
-	WHILE i <= insertCount
+	WHILE i <= insertcount
 		DO
-			INSERT INTO girls.admin(girls.admin.username, password) VALUES (CONCAT('ROSE', i), '666');
+			INSERT INTO girls.admin(girls.admin.username, password)
+				VALUES (CONCAT('ROSE',i), '666');
 			SET i = i + 1;
 			END WHILE;
 END $
@@ -151,7 +155,7 @@ END $
 CALL pro_while1(100) $
 
 SELECT *
-FROM girls.admin $
+	FROM girls.admin $
 
 /*
         添加LEAVE语句
@@ -159,15 +163,17 @@ FROM girls.admin $
  */
 TRUNCATE TABLE admin $
 DROP PROCEDURE pro_while1 $
-CREATE PROCEDURE test_while1(IN insertCount INT)
+CREATE PROCEDURE test_while1(IN insertcount INT)
 BEGIN
 	DECLARE i INT DEFAULT 1;
 	a:
-	WHILE i <= insertCount
+	WHILE i <= insertcount
 		DO
-			INSERT INTO admin(username, password) VALUES (CONCAT('xiaohua', i), '0000');
-			IF i >= 20 THEN
-				LEAVE a;
+			INSERT INTO admin(username, password)
+				VALUES (CONCAT('xiaohua',i), '0000');
+			IF i >= 20
+				THEN
+					LEAVE a;
 				END IF;
 			SET i = i + 1;
 			END WHILE a;
@@ -175,27 +181,29 @@ END $
 
 CALL test_while1(100) $
 SELECT *
-FROM girls.admin $
+	FROM girls.admin $
 /*
         添加ITERATE语句
         案例3：批量插入，根据次数插入到admin表中多条记录，只插入偶数次
  */
 TRUNCATE TABLE admin $
 DROP PROCEDURE test_while1 $
-CREATE PROCEDURE test_while1(IN insertCount INT)
+CREATE PROCEDURE test_while1(IN insertcount INT)
 BEGIN
 	DECLARE i INT DEFAULT 0;
 	a:
-	WHILE i <= insertCount
+	WHILE i <= insertcount
 		DO
 			SET i = i + 1;
-			IF mod(i, 2) <> 0 THEN
-				ITERATE a;
+			IF MOD(i,2) <> 0
+				THEN
+					ITERATE a;
 				END IF;
-			INSERT INTO admin(username, password) VALUES (CONCAT('xiaohua', i), '0000');
+			INSERT INTO admin(username, password)
+				VALUES (CONCAT('xiaohua',i), '0000');
 			END WHILE a;
 END $
 
 CALL test_while1(100) $
 SELECT *
-FROM girls.admin $
+	FROM girls.admin $

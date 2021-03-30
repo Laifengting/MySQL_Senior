@@ -63,7 +63,8 @@ BIGFILE - 只包含一个数据或临时文件的表空间(该文件最多可以
 tablespace_name - 要创建的表空间的名称。
 */
 
-CREATE TEMPORARY TABLESPACE TRAFFIC_TEMP
+CREATE TEMPORARY
+TABLESPACE TRAFFIC_TEMP
       /*   TEMPFILE 'C:\Oracle\oradata\orcl\TRAFFIC_TEMP.DBF'--临时表空间的存放地址*/
          TEMPFILE 'C:\ORACLE\oradata\orcl\TRAFFIC_TEMP.DBF'
          SIZE 100M--表空间的初始大小
@@ -158,8 +159,8 @@ STORAGE
  )
 */
 CREATE TABLESPACE lft
-/*DATAFILE 'C:\Oracle\oradata\orcl\annie.dbf'--数据表空间的存放地址*/
-DATAFILE 'C:\ORACLE\oradata\orcl\lft.dbf'
+	/*DATAFILE 'C:\Oracle\oradata\orcl\annie.dbf'--数据表空间的存放地址*/
+	DATAFILE 'C:\ORACLE\oradata\orcl\lft.dbf'
 SIZE 100m--表空间的初始大小
 AUTOEXTEND ON--是否自动扩展
 NEXT 10m MAXSIZE UNLIMITED--每次扩展多少,到达最大值后无限制
@@ -207,7 +208,7 @@ tablespace_name - 要创建的表空间的名称。
 
 
 --删除表空间
-drop  tablespace  annie;
+DROP TABLESPACE annie;
 
 --创建用户
 /*
@@ -216,10 +217,13 @@ DBA 使用 CREATE USER 语句创建用户
 CREATE USER user              			   
 IDENTIFIED BY   password;
 */
-CREATE USER LFT IDENTIFIED BY 201314--创建用户和密码
-ACCOUNT UNLOCK--解锁用户账号
+CREATE USER lft IDENTIFIED BY 201314--创建用户和密码
+	ACCOUNT
+UNLOCK
+--解锁用户账号
 DEFAULT TABLESPACE LFT --分配数据表空间
-TEMPORARY TABLESPACE traffic_temp;--分配临时表空间
+TEMPORARY TABLESPACE traffic_temp;
+--分配临时表空间
 
 --用户的系统权限
 /*
@@ -235,11 +239,13 @@ TO user [, user| role, PUBLIC...];
     CREATE VIEW（创建视图）
     CREATE PROCEDURE（创建过程）
 */
-GRANT CREATE SESSION,CREATE TABLE TO lft;--给用户赋予权限
+GRANT CREATE SESSION,CREATE TABLE TO lft;
+--给用户赋予权限
 
-GRANT DBA TO lft;--给用户赋予角色
+GRANT DBA TO lft;
+--给用户赋予角色
 
---修改用户表空间(TableSpace)
+--修改用户表空间(TABLESPACE)
 /*用户拥有create table权限之外，还需要分配相应的表空间才可开辟存储空间用于创建的表
 ALTER USER user_name QUOTA UNLIMITED 
 ON table_space_name
@@ -253,10 +259,10 @@ ON annie;
 
 ----scott用户,密码默认为tiger.实际为201314
 --解锁scott用户
-alter user scott account unlock;
+ALTER USER scott ACCOUNT UNLOCK;
 
 --解锁scott用户的密码【此句也可以用来重置密码】
-alter user scott identified by 201314;
+ALTER USER scott IDENTIFIED BY 201314;
 
 
 
@@ -301,16 +307,17 @@ IDENTIFIED BY 201314;
 */
 
 --分配表 EMPLOYEES 的查询权限
-GRANT  select--什么权限
+GRANT SELECT--什么权限
 ON     employees--分配某个表
-TO     lft,annie;--给哪个或哪些用户
+TO     lft,annie;
+--给哪个或哪些用户
 
 
 
 --分配表中各个列的更新权限
-GRANT  update 
-ON     scott.departments
-TO     lft,annie;
+GRANT UPDATE
+	ON scott.departments
+	TO lft,annie;
 
 --查询权限分配情况
 /*
@@ -324,7 +331,8 @@ USER_COL_PRIVS_MADE		用户分配的关于列的对象权限
 USER_COL_PRIVS_RECD		用户拥有的关于列的对象权限
 USER_SYS_PRIVS			用户拥有的系统权限
 */
-SELECT * FROM USER_SYS_PRIVS;
+SELECT *
+	FROM user_sys_privs;
 
 --收回对象权限
 /*
@@ -337,9 +345,9 @@ FROM   {user[, user...]|role|PUBLIC}
 [CASCADE CONSTRAINTS];
 */
 
-REVOKE  SELECT, INSERT
-ON      departments
-FROM    scott;
+REVOKE SELECT, INSERT
+	ON departments
+	FROM scott;
 
 
 --总结

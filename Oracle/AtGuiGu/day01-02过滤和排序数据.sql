@@ -7,8 +7,8 @@ WHERE  condition(s) ];*/
 SELECT employee_id,
 	   last_name,
 	   salary
-FROM   employees
-WHERE  department_id = 90;
+	FROM employees
+	WHERE department_id = 90;
 
 --字符和日期
 /*
@@ -20,15 +20,15 @@ WHERE  department_id = 90;
 SELECT employee_id,
 	   last_name,
 	   salary
-FROM   employees
-WHERE  last_name = 'Higgins';
+	FROM employees
+	WHERE last_name = 'Higgins';
 
 --过滤日期
 SELECT last_name,
 	   hire_date
-FROM   employees
-WHERE  to_char(hire_date,
-			   'yyyy-mm-dd') = '1994-06-07';
+	FROM employees
+	WHERE to_char(hire_date,
+				  'yyyy-mm-dd') = '1994-06-07';
 
 --比较运算
 /*
@@ -50,25 +50,25 @@ IS NULL             空值
 SELECT last_name,
 	   hire_date,
 	   salary
-FROM   employees
-WHERE  salary >= 4000
-AND    salary <= 7000;
+	FROM employees
+	WHERE salary >= 4000
+	  AND salary <= 7000;
 
---[not]between and的使用
+--[NOT]BETWEEN and的使用
 SELECT last_name,
 	   hire_date,
 	   salary
-FROM   employees
-WHERE  salary BETWEEN 4000 AND 7000;
+	FROM employees
+	WHERE salary BETWEEN 4000 AND 7000;
 
---[not]in的使用
+--[NOT]in的使用
 SELECT last_name,
 	   hire_date,
 	   salary
-FROM   employees
-WHERE  department_id IN (70,
-						 80,
-						 90);
+	FROM employees
+	WHERE department_id IN (70,
+							80,
+							90);
 
 --like的使用
 --【案例】查询名字中第三个字母是a的员工的姓名，部门编号，薪水。
@@ -76,33 +76,34 @@ WHERE  department_id IN (70,
 SELECT last_name,
 	   department_id,
 	   salary
-FROM   employees
-WHERE  last_name LIKE '__a%';
+	FROM employees
+	WHERE last_name LIKE '__a%';
 
 --修改表中一个人的名字，加入_
 UPDATE employees
-SET    last_name = 'Wha_len'
-WHERE  last_name = 'Whalen';
+SET
+	last_name = 'Wha_len'
+	WHERE last_name = 'Whalen';
 
 SELECT *
-FROM   employees
-WHERE  last_name = 'Wha_len';
+	FROM employees
+	WHERE last_name = 'Wha_len';
 
 --【案例】查询员工名字中带有'_'的员工有哪些？
---设置转义字符 'x' escape 'x'
+--设置转义字符 'x' ESCAPE 'x'
 SELECT last_name,
 	   department_id,
 	   salary
-FROM   employees
-WHERE  last_name LIKE '%$_%' ESCAPE '$';
+	FROM employees
+	WHERE last_name LIKE '%$_%' ESCAPE '$';
 
---is null/is not null的使用
+--IS NULL/IS NOT null的使用
 SELECT last_name,
 	   department_id,
 	   salary,
 	   commission_pct
-FROM   employees
-WHERE  commission_pct IS NOT NULL;
+	FROM employees
+	WHERE commission_pct IS NOT NULL;
 
 --逻辑运算
 /*
@@ -113,9 +114,9 @@ not             逻辑非
 */
 --【案例】查询部门编号80且工资小于等于7000的员工信息
 SELECT *
-FROM   employees
-WHERE  department_id = 80
-AND    salary <= 7000;
+	FROM employees
+	WHERE department_id = 80
+	  AND salary <= 7000;
 
 --运算符优先级
 /*
@@ -140,13 +141,13 @@ DESC（descend）: 降序
 
 SELECT last_name,
 	   department_id,
-	   salary AS "薪水",
+	   salary 薪水,
 	   commission_pct
-FROM   employees
-WHERE  department_id = 80
-ORDER  BY 薪水          ASC,
-		  department_id ASC,
-		  last_name     DESC;
+	FROM employees
+	WHERE department_id = 80
+	ORDER BY 薪水            ASC,
+			 department_id ASC,
+			 last_name     DESC;
 
 
 --总结
@@ -171,24 +172,24 @@ FROM       table
 */
 SELECT last_name,
 	   salary
-FROM   employees
-WHERE  salary > 12000;
+	FROM employees
+	WHERE salary > 12000;
 
 /*
 2.查询员工号为176的员工的姓名和部门号
 */
 SELECT last_name,
 	   department_id
-FROM   employees
-WHERE  employee_id = 176;
+	FROM employees
+	WHERE employee_id = 176;
 
 /*
 3.选择工资不在5000到12000的员工的姓名和工资
 */
 SELECT last_name,
 	   salary
-FROM   employees
---where salary < 5000 or salary > 12000;
+	FROM employees --
+	WHERE salary < 5000 OR salary > 12000;
 WHERE  salary NOT BETWEEN 5000 AND 12000;
 
 /*
@@ -197,17 +198,17 @@ WHERE  salary NOT BETWEEN 5000 AND 12000;
 SELECT last_name,
 	   job_id,
 	   hire_date
-FROM   employees
-WHERE  to_char(hire_date,
-			   'YYYY-MM-DD') BETWEEN '1998-02-01' AND '1998-05-01';
+	FROM employees
+	WHERE to_char(hire_date,
+				  'YYYY-MM-DD') BETWEEN '1998-02-01' AND '1998-05-01';
 
 /*
 5.选择在20或50号部门工作的员工姓名和部门号
 */
 SELECT last_name,
 	   department_id
-FROM   employees
---WHERE department_id = 20 or department_id = 50;
+	FROM employees --
+	WHERE department_id = 20 OR department_id = 50;
 WHERE  department_id IN (20,
 						 50);
 
@@ -216,8 +217,8 @@ WHERE  department_id IN (20,
 */
 SELECT last_name,
 	   hire_date
-FROM   employees
---WHERE hire_date like '%94';
+	FROM employees --
+	WHERE hire_date LIKE '%94';
 WHERE  to_char(hire_date,
 			   'YYYY') = '1994';
 
@@ -226,8 +227,8 @@ WHERE  to_char(hire_date,
 */
 SELECT last_name,
 	   job_id
-FROM   employees
-WHERE  manager_id IS NULL;
+	FROM employees
+	WHERE manager_id IS NULL;
 
 /*
 8.选择公司中有奖金的员工姓名，工资和奖金级别
@@ -235,22 +236,22 @@ WHERE  manager_id IS NULL;
 SELECT last_name,
 	   salary,
 	   commission_pct
-FROM   employees
-WHERE  commission_pct IS NOT NULL;
+	FROM employees
+	WHERE commission_pct IS NOT NULL;
 
 /*
 9.选择员工姓名的第三个字母是a的员工姓名
 */
 SELECT last_name
-FROM   employees
-WHERE  last_name LIKE '__a%';
+	FROM employees
+	WHERE last_name LIKE '__a%';
 
 /*
 10.选择姓名中有字母a和e的员工姓名
 */
 SELECT last_name
-FROM   employees
---WHERE last_name LIKE '%a%e%' OR last_name LIKE '%e%a%';
+	FROM employees --
+	WHERE last_name LIKE '%a%e%' OR last_name LIKE '%e%a%';
 WHERE  last_name LIKE '%a%'
 AND    last_name LIKE '%e%';
 
@@ -258,5 +259,5 @@ AND    last_name LIKE '%e%';
 11.查询姓名中有_的员工姓名
 */
 SELECT last_name
-FROM   employees
-WHERE  last_name LIKE '%\_%' ESCAPE '\';
+	FROM employees
+	WHERE last_name LIKE '%\_%' ESCAPE '\';

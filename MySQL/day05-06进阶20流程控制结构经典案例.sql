@@ -14,17 +14,18 @@ CREATE TABLE stringcontent (
 	content VARCHAR(20)
 );
 
-CREATE PROCEDURE test_randstr_insert(IN insertCount INT)
+CREATE PROCEDURE test_randstr_insert(IN insertcount INT)
 BEGIN
 	DECLARE i INT DEFAULT 1;#定义一个循环变量i，表示插入次数
 	DECLARE str VARCHAR(26) DEFAULT 'abcdefghijklmnopqrstuvwxyz';
-	DECLARE startIndex INT DEFAULT 1;#代表起始索引位置
+	DECLARE startindex INT DEFAULT 1;#代表起始索引位置
 	DECLARE len INT DEFAULT 1;#代表截取的字符的长度
-	WHILE i <= insertCount
+	WHILE i <= insertcount
 		DO
-			SET len = floor(rand() * (20 - startIndex + 1) + 1); #产生一个随机的整数，代表截取长度1-（26-startIndex+1)
-			SET startIndex = floor(rand() * 26 + 1); #产生一个随机的整数，代表起始索引 1 - 26
-			INSERT INTO stringcontent(content) VALUES (substr(str, startIndex, len));
+			SET len = FLOOR(RAND() * (20 - startindex + 1) + 1); #产生一个随机的整数，代表截取长度1-（26-startIndex+1)
+			SET startindex = FLOOR(RAND() * 26 + 1); #产生一个随机的整数，代表起始索引 1 - 26
+			INSERT INTO stringcontent(content)
+				VALUES (SUBSTR(str,startindex,len));
 			SET i = i + 1;
 			END WHILE;
 END $

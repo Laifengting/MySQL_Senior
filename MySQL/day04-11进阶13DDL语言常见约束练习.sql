@@ -24,7 +24,7 @@ ALTER TABLE dept2
 ALTER TABLE emp2
 	ADD COLUMN dept_id INT;
 ALTER TABLE emp2
-	ADD CONSTRAINT fk_emp2_dept2 FOREIGN KEY (dept_id) REFERENCES dept2 (id);
+	ADD CONSTRAINT fk_emp2_dept2 FOREIGN KEY (dept_id) REFERENCES dept2(id);
 
 # 列级约束与表级约束的区别
 /*

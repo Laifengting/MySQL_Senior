@@ -35,34 +35,28 @@ USE girls;
 DROP TABLE IF EXISTS tab_int;
 
 CREATE TABLE IF NOT EXISTS tab_int (
-    #如果加了ZEROFILL默认就是无符号。
-     t1 INT (7) ZEROFILL,
-    #设置为无符号，
-     t2 INT (7) UNSIGNED ZEROFILL
+	#如果加了ZEROFILL默认就是无符号。
+	t1 INT(7) ZEROFILL,
+	#设置为无符号，
+	t2 INT(7) UNSIGNED ZEROFILL
 );
 
 DESC tab_int;
 
 INSERT INTO tab_int
-VALUES
-    (- 1234000005);
+	VALUES (- 1234000005);
 
 INSERT INTO tab_int
-VALUES
-    (- 123456, - 123456);
+	VALUES (- 123456, - 123456);
 
 INSERT INTO tab_int
-VALUES
-    (2147483648, 4294967296);
+	VALUES (2147483648, 4294967296);
 
 INSERT INTO tab_int
-VALUES
-    (123, 123);
+	VALUES (123, 123);
 
-SELECT
-    *
-FROM
-    tab_int;
+SELECT *
+	FROM tab_int;
 
 /*
 		1.1 数值型：
@@ -89,28 +83,32 @@ FROM
 DROP TABLE IF EXISTS tab_float;
 
 #带M和D
- CREATE TABLE tab_float (f1 FLOAT (5, 2), f2 DOUBLE (5, 2), f3 DEC (5, 2));
+CREATE TABLE tab_float (
+	f1 FLOAT(5, 2),
+	f2 DOUBLE(5, 2),
+	f3 DEC(5, 2)
+);
 
 #省略M和D
- CREATE TABLE tab_float (f1 FLOAT, f2 DOUBLE, f3 DEC);
+CREATE TABLE tab_float (
+	f1 FLOAT,
+	f2 DOUBLE,
+	f3 DEC
+);
 
-DESC `tab_float`;
-
-INSERT INTO tab_float
-VALUES
-    (123.45, 123.45, 123.45);
-
-INSERT INTO tab_float
-VALUES
-    (123.456, 123.456, 123.456);
+DESC tab_float;
 
 INSERT INTO tab_float
-VALUES
-    (123.4, 123.4, 123.4);
+	VALUES (123.45, 123.45, 123.45);
 
 INSERT INTO tab_float
-VALUES
-    (12345.4, 12345.4, 12345.5);
+	VALUES (123.456, 123.456, 123.456);
+
+INSERT INTO tab_float
+	VALUES (123.4, 123.4, 123.4);
+
+INSERT INTO tab_float
+	VALUES (12345.4, 12345.4, 12345.5);
 
 /*
 		1.2 字符型：
@@ -134,50 +132,44 @@ VALUES
 /*
 		1.2.1 ENUM类型
 */
-CREATE TABLE tab_char (c1 ENUM ('a', 'b', 'c'));
+CREATE TABLE tab_char (
+	c1 ENUM ('a', 'b', 'c')
+);
 
-INSERT INTO `tab_char`
-VALUES
-    ('a');
+INSERT INTO tab_char
+	VALUES ('a');
 
-INSERT INTO `tab_char`
-VALUES
-    ('b');
+INSERT INTO tab_char
+	VALUES ('b');
 
-INSERT INTO `tab_char`
-VALUES
-    ('c');
+INSERT INTO tab_char
+	VALUES ('c');
 
 #5.5版本插入空白值，8.0版本插入失败
- INSERT INTO `tab_char`
-VALUES
-    ('d');
+INSERT INTO tab_char
+	VALUES ('d');
 
-INSERT INTO `tab_char`
-VALUES
-    ('A');
+INSERT INTO tab_char
+	VALUES ('A');
 
-SELECT
-    *
-FROM
-    `tab_char`;
+SELECT *
+	FROM tab_char;
 
 /*
 			1.2.1 SET类型
 */
-CREATE TABLE tab_set (s1 SET ('a', 'b', 'c', 'd', 'e'));
+CREATE TABLE tab_set (
+	s1 SET ('a', 'b', 'c', 'd', 'e')
+);
 
-INSERT INTO `tab_set`
-VALUES
-    ('a');
+INSERT INTO tab_set
+	VALUES ('a');
 
-INSERT INTO `tab_set`
-VALUES
-    ('a,b');
+INSERT INTO tab_set
+	VALUES ('a,b');
 
-INSERT INTO `tab_set`
-VALUES
-    ('a,b,c');
+INSERT INTO tab_set
+	VALUES ('a,b,c');
 
 /*
 		1.3 日期型：
@@ -195,11 +187,16 @@ VALUES
 				2、	timestamp和实际时区有关，更能反映实际的日期，而datetime则只能反映出插入时的当地时区
 				3、	timestamp的属性受Mysql版本和SQLMode的影响很大
 */
-CREATE TABLE tab_date (t1 DATETIME, t2 TIMESTAMP);
+CREATE TABLE tab_date (
+	t1 DATETIME,
+	t2 TIMESTAMP
+);
 
-INSERT INTO `tab_date` VALUES(NOW(),NOW());
+INSERT INTO tab_date
+	VALUES (NOW(), NOW());
 
-SELECT * FROM tab_date;
+SELECT *
+	FROM tab_date;
 
 SHOW VARIABLES LIKE 'time_zone';
 

@@ -28,36 +28,28 @@ USE girls;
 		案例1:查询前五条员工信息
 */
 # 写法一：
- SELECT
-    *
-FROM
-    employees
-LIMIT 0, 5;
+SELECT *
+	FROM employees
+	LIMIT 0, 5;
 
 # 写法二：
- SELECT
-    *
-FROM
-    employees # 索引默认从0开始。可以省略。
- LIMIT 5;
+SELECT *
+	FROM employees # 索引默认从0开始。可以省略。
+	LIMIT 5;
 
 /*		
 		案例2:查询第11条-第25条信息员工信息
 */
-SELECT
-    *
-FROM
-    employees
-LIMIT 10, 15;
+SELECT *
+	FROM employees
+	LIMIT 10, 15;
 
 /*		
 		案例3:有奖金的员工信息，并且工资较高的前10名显示出来
 */
-SELECT
-    *
-FROM
-    employees
-WHERE commission_pct IS NOT NULL
-ORDER BY salary DESC
-LIMIT 10;
+SELECT *
+	FROM employees
+	WHERE commission_pct IS NOT NULL
+	ORDER BY salary DESC
+	LIMIT 10;
 

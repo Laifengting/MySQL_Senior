@@ -20,99 +20,99 @@ USE girls;
 		要求：1.插入的值的类型要与列的类型一致或兼容 
 */
 SELECT *
-FROM beauty;
+	FROM beauty;
 
 INSERT INTO beauty (id,
-                    `name`,
-                    sex,
-                    borndate,
-                    phone,
-                    photo,
-                    boyfriend_id)
-VALUES (13,
-        '小龙女',
-        '女',
-        '1966-02-05',
-        13345678984,
-        NULL,
-        9);
+					name,
+					sex,
+					borndate,
+					phone,
+					photo,
+					boyfriend_id)
+	VALUES (13,
+			'小龙女',
+			'女',
+			'1966-02-05',
+			13345678984,
+			NULL,
+			9);
 
 /*
 		要求：2.不可以为null的列必须插入值。可以为null的列如何插入值？
 */
 # 方式一：
 INSERT INTO beauty (id,
-                    `name`,
-                    sex,
-                    borndate,
-                    phone,
-                    photo,
-                    boyfriend_id)
-VALUES (13,
-        '小龙女',
-        '女',
-        '1966-02-05',
-        13345678984,
-        NULL,
-        9);
+					name,
+					sex,
+					borndate,
+					phone,
+					photo,
+					boyfriend_id)
+	VALUES (13,
+			'小龙女',
+			'女',
+			'1966-02-05',
+			13345678984,
+			NULL,
+			9);
 
 # 方式二：
 INSERT INTO beauty (id,
-                    `name`,
-                    sex,
-                    borndate,
-                    phone,
-                    boyfriend_id)
-VALUES (14,
-        '陆无双',
-        '女',
-        '1988-03-05',
-        13345678984,
-        9);
+					name,
+					sex,
+					borndate,
+					phone,
+					boyfriend_id)
+	VALUES (14,
+			'陆无双',
+			'女',
+			'1988-03-05',
+			13345678984,
+			9);
 
 /*
 		要求：3.列的顺序可以调换
 */
-INSERT INTO beauty (`name`,
-                    id,
-                    borndate,
-                    sex,
-                    phone,
-                    boyfriend_id)
-VALUES ('黄蓉',
-        15,
-        '1985-03-05',
-        '女',
-        13345678984,
-        9);
+INSERT INTO beauty (name,
+					id,
+					borndate,
+					sex,
+					phone,
+					boyfriend_id)
+	VALUES ('黄蓉',
+			15,
+			'1985-03-05',
+			'女',
+			13345678984,
+			9);
 
 /*
 		要求：4.列数和值的个数必须一致
 */
-INSERT INTO beauty (`name`,
-                    id,
-                    borndate,
-                    sex,
-                    phone,
-                    boyfriend_id)
-VALUES ('关晓彤',
-        16,
-        '1989-03-05',
-        '女',
-        18602079288,
-        9);
+INSERT INTO beauty (name,
+					id,
+					borndate,
+					sex,
+					phone,
+					boyfriend_id)
+	VALUES ('关晓彤',
+			16,
+			'1989-03-05',
+			'女',
+			18602079288,
+			9);
 
 /*
 		要求：5.可以省略列名，默认所有列，而且列的顺序和表中列的顺序一致。
 */
 INSERT INTO beauty
-VALUES (17,
-        '张庭',
-        '女',
-        '1988-01-05',
-        18816211324,
-        NULL,
-        9);
+	VALUES (17,
+			'张庭',
+			'女',
+			'1988-01-05',
+			18816211324,
+			NULL,
+			9);
 
 /*
 		插入语句
@@ -122,9 +122,10 @@ VALUES (17,
 			INSERT INTO 表名 SET 列名=值,列名=值,...
 */
 INSERT INTO beauty
-SET id    = 18,
-    NAME  = '刘涛',
-    phone = 119;
+SET
+	id    = 18,
+	name  = '刘涛',
+	phone = 119;
 
 /*
 		插入方式 PK
@@ -133,42 +134,42 @@ SET id    = 18,
 		① 方式一支持插入多行，方式二不支持
 */
 INSERT INTO beauty
-VALUES (19,
-        '张庭1',
-        '女',
-        '1988-01-05',
-        18816211324,
-        NULL,
-        9),
-       (20,
-        '张庭2',
-        '女',
-        '1988-01-05',
-        18816211324,
-        NULL,
-        9),
-       (21,
-        '张庭3',
-        '女',
-        '1988-01-05',
-        18816211324,
-        NULL,
-        9);
+	VALUES (19,
+			'张庭1',
+			'女',
+			'1988-01-05',
+			18816211324,
+			NULL,
+			9),
+		   (20,
+			'张庭2',
+			'女',
+			'1988-01-05',
+			18816211324,
+			NULL,
+			9),
+		   (21,
+			'张庭3',
+			'女',
+			'1988-01-05',
+			18816211324,
+			NULL,
+			9);
 
 /*
 		② 方式一支持子查询，方式二不支持
 */
-INSERT INTO beauty (id, NAME, phone)
+INSERT INTO beauty (id, name, phone)
 SELECT 22,
-       '宋茜',
-       110;
+	   '宋茜',
+	   110;
 
-INSERT INTO beauty (id, NAME, phone)
+INSERT INTO beauty (id, name, phone)
 SELECT id,
-       boyName,
-       119
-FROM boys
-WHERE id < 3;
+	   boyname,
+	   119
+	FROM boys
+	WHERE id < 3;
 
 /*
 		1.2修改语句
@@ -202,8 +203,9 @@ WHERE id < 3;
 */
 UPDATE
 	beauty
-SET `phone` = 13899888899
-WHERE `name` LIKE '张%';
+SET
+	phone = 13899888899
+	WHERE name LIKE '张%';
 
 /*
 		1.2.1 修改单表的记录
@@ -211,9 +213,10 @@ WHERE `name` LIKE '张%';
 */
 UPDATE
 	boys
-SET boyName  = '吴磊',
-    `userCP` = 1000
-WHERE `id` = 2;
+SET
+	boyname = '吴磊',
+	usercp  = 1000
+	WHERE id = 2;
 
 /*
 		1.2.2 修改多表的记录
@@ -222,9 +225,10 @@ WHERE `id` = 2;
 UPDATE
 	boys bo
 		INNER JOIN beauty b
-		ON bo.`id` = b.`boyfriend_id`
-SET b.`phone` = 114
-WHERE bo.`boyName` = '张无忌';
+		ON bo.id = b.boyfriend_id
+SET
+	b.phone = 114
+	WHERE bo.boyname = '张无忌';
 
 /*
 		1.2.2 修改多表的记录
@@ -233,12 +237,13 @@ WHERE bo.`boyName` = '张无忌';
 UPDATE
 	boys bo
 		RIGHT JOIN beauty b
-		ON bo.`id` = b.`boyfriend_id`
-SET b.`boyfriend_id` = 2
-WHERE bo.`id` IS NULL;
+		ON bo.id = b.boyfriend_id
+SET
+	b.boyfriend_id = 2
+	WHERE bo.id IS NULL;
 
 SELECT *
-FROM beauty;
+	FROM beauty;
 
 /*
 		1.3删除语句
@@ -274,11 +279,11 @@ FROM beauty;
 		案例：删除手机号以9结尾的女神信息
 */
 DELETE
-FROM beauty
-WHERE phone LIKE '%9';
+	FROM beauty
+	WHERE phone LIKE '%9';
 
 SELECT *
-FROM beauty;
+	FROM beauty;
 
 /*
 		1.3.1 方式一：delete
@@ -288,10 +293,10 @@ FROM beauty;
 DELETE
 	b,
 	bo
-FROM beauty b
-	     INNER JOIN boys bo
-	                ON b.`boyfriend_id` = bo.`id`
-WHERE bo.`boyName` = '张无忌';
+	FROM beauty     b
+	INNER JOIN boys bo
+			   ON b.boyfriend_id = bo.id
+	WHERE bo.boyname = '张无忌';
 
 /*
 		1.3.1 方式一：delete
@@ -301,10 +306,10 @@ WHERE bo.`boyName` = '张无忌';
 DELETE
 	b,
 	bo
-FROM beauty b
-	     INNER JOIN boys bo
-	                ON b.`boyfriend_id` = bo.`id`
-WHERE bo.`boyName` = '黄晓明';
+	FROM beauty     b
+	INNER JOIN boys bo
+			   ON b.boyfriend_id = bo.id
+	WHERE bo.boyname = '黄晓明';
 
 /*
 		1.3.2方式二：truncate
@@ -328,18 +333,18 @@ TRUNCATE TABLE boys;
 		⑤ TRUNCATE删除不能回滚，DELETE删除可以回滚
 */
 DELETE
-FROM boys;
-INSERT INTO boys(boyName, userCP)
-VALUES ('刘备', 100),
-       ('关羽', 100),
-       ('张飞', 100);
+	FROM boys;
+INSERT INTO boys(boyname, usercp)
+	VALUES ('刘备', 100),
+		   ('关羽', 100),
+		   ('张飞', 100);
 
 
 TRUNCATE TABLE boys;
-INSERT INTO boys(boyName, userCP)
-VALUES ('刘备', 100),
-       ('关羽', 100),
-       ('张飞', 100);
+INSERT INTO boys(boyname, usercp)
+	VALUES ('刘备', 100),
+		   ('关羽', 100),
+		   ('张飞', 100);
 
 
 

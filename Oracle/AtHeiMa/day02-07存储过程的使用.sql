@@ -16,18 +16,23 @@
 */
 
 --给指定员工涨100元钱
-CREATE OR REPLACE PROCEDURE pl(eno emp.empno%TYPE) AS
+CREATE OR
+REPLACE procedure pl(eno emp.empno%TYPE) AS
 BEGIN
-	UPDATE emp
-	SET    sal = sal + 100
-	WHERE  empno = eno;
-	COMMIT;
+UPDATE emp
+SET
+	sal = sal + 100
+	WHERE empno = eno;
+COMMIT;
 END;
 
-SELECT * FROM emp WHERE empno = 7788;
+SELECT *
+	FROM emp
+	WHERE empno = 7788;
 
-	--测试存储过程PL
+--测试存储过程PL
 DECLARE
 BEGIN
-pl(7788);
+	pl
+(7788);
 END;

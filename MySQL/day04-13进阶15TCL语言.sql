@@ -82,8 +82,8 @@ CREATE TABLE account (
 );
 
 INSERT INTO account(username, balance)
-VALUES ('张无忌', 1000),
-       ('赵敏', 1000);
+	VALUES ('张无忌', 1000),
+		   ('赵敏', 1000);
 
 # 第一步 开启事务
 SET AUTOCOMMIT = 0;
@@ -91,18 +91,20 @@ START TRANSACTION;
 
 # 第二步 编写一组事务的语句
 UPDATE account
-SET balance = 1000
-WHERE username = '张无忌';
+SET
+	balance = 1000
+	WHERE username = '张无忌';
 UPDATE account
-SET balance = 1000
-WHERE username = '赵敏';
+SET
+	balance = 1000
+	WHERE username = '赵敏';
 
 # 第三步 结束事务
 ROLLBACK;
 COMMIT;
 
 SELECT *
-FROM account;
+	FROM account;
 
 /*
         演示2 事务对于DELETE和TRUNCATE的处理的区别
@@ -112,8 +114,8 @@ START TRANSACTION;
 
 # DELETE支持回滚
 DELETE
-FROM account
-WHERE 1 = 1;
+	FROM account
+	WHERE 1 = 1;
 ROLLBACK;
 
 
@@ -124,7 +126,7 @@ TRUNCATE TABLE account;
 ROLLBACK;
 
 SELECT *
-FROM account;
+	FROM account;
 
 /*
         演示3 SAVEPOINT的使用
@@ -134,12 +136,12 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SAVEPOINT a;#设置保存点。
 DELETE
-FROM account
-WHERE id = 1;
+	FROM account
+	WHERE id = 1;
 SAVEPOINT b;#设置保存点。
 DELETE
-FROM account
-WHERE id = 2;
+	FROM account
+	WHERE id = 2;
 
 ROLLBACK TO b;
 ROLLBACK TO a;

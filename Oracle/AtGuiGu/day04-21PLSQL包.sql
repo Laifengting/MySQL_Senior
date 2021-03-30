@@ -66,73 +66,73 @@ END [package_name];
 
 --包定义的说明
 --例 1:创建的包为 demo_pack, 该包中包含一个记录变量 DeptRec、两个函数和一个过程。
-CREATE OR REPLACE PACKAGE demo_pack IS
+CREATE OR
+REPLACE package demo_pack IS
 	deptrec dept%ROWTYPE;
-	FUNCTION add_dept
+FUNCTION add_dept
 	(
 		dept_no   NUMBER,
 		dept_name VARCHAR2,
 		location  VARCHAR2
 	) RETURN NUMBER;
-	FUNCTION remove_dept(dept_no NUMBER) RETURN NUMBER;
-	PROCEDURE query_dept(dept_no IN NUMBER);
+FUNCTION remove_dept(dept_no NUMBER) RETURN NUMBER;
+PROCEDURE query_dept(dept_no IN NUMBER);
 END demo_pack;
 
 
 --包主体的创建方法，它实现上面所声明的包定义
-CREATE OR REPLACE PACKAGE BODY demo_pack IS
+CREATE OR
+REPLACE package BODY demo_pack IS
 	FUNCTION add_dept
-	(
-		dept_no   NUMBER,
-		dept_name VARCHAR2,
-		location  VARCHAR2
-	) RETURN NUMBER IS
-		empno_remaining EXCEPTION;
-		PRAGMA EXCEPTION_INIT(empno_remaining,
+(dept_no NUMBER,
+ dept_name VARCHAR2,
+ location VARCHAR2) RETURN NUMBER IS
+	empno_remaining EXCEPTION;
+PRAGMA EXCEPTION_INIT(empno_remaining,
 							  -1);
 		/* -1 是违反唯一约束条件的错误代码 */
-	BEGIN
-		INSERT INTO dept
-		VALUES
-			(dept_no,
-			 dept_name,
-			 location);
-		IF SQL%FOUND THEN
+BEGIN
+INSERT INTO dept
+	VALUES (dept_no,
+			dept_name,
+			location);
+IF SQL%FOUND THEN
 			RETURN 1;
-		END IF;
-	EXCEPTION
+END IF;
+EXCEPTION
 		WHEN empno_remaining THEN
 			RETURN 0;
-		WHEN OTHERS THEN
+WHEN OTHERS THEN
 			RETURN - 1;
-	END add_dept;
-	FUNCTION remove_dept(dept_no NUMBER) RETURN NUMBER IS
-	BEGIN
-		DELETE FROM dept
-		WHERE  deptno = dept_no;
-		IF SQL%FOUND THEN
+END add_dept;
+FUNCTION remove_dept(dept_no NUMBER) RETURN NUMBER IS
+BEGIN
+DELETE
+	FROM dept
+	WHERE deptno = dept_no;
+IF SQL%FOUND THEN
 			RETURN 1;
-		ELSE
+ELSE
 			RETURN 0;
-		END IF;
-	EXCEPTION
+END IF;
+EXCEPTION
 		WHEN OTHERS THEN
 			RETURN - 1;
-	END remove_dept;
-	PROCEDURE query_dept(dept_no IN NUMBER) IS
-	BEGIN
-		SELECT *
-		INTO   deptrec
-		FROM   dept
-		WHERE  deptno = dept_no;
-	EXCEPTION
+END remove_dept;
+PROCEDURE query_dept(dept_no IN NUMBER) IS
+BEGIN
+SELECT *
+	INTO deptrec
+	FROM dept
+	WHERE deptno = dept_no;
+EXCEPTION
 		WHEN no_data_found THEN
 			dbms_output.put_line('数据库中没有编码为' || dept_no || '的部门');
-		WHEN too_many_rows THEN
+WHEN too_many_rows THEN
 			dbms_output.put_line('程序运行错误!请使用游标');
-		WHEN OTHERS THEN
+WHEN OTHERS THEN
 			dbms_output.put_line(SQLCODE || '----' || SQLERRM);
-	END query_dept;
+END query_dept;
 BEGIN
 	NULL;
 END demo_pack;
@@ -146,96 +146,98 @@ END demo_pack;
 
 DECLARE
 	var NUMBER;
-BEGIN
-	var := demo_pack.add_dept(90,
+BEGIN var := demo_pack.add_dept(90,
 							  ’administration’,
 							  ‘beijing’);
-	IF var = -1 THEN
+IF var = -1 THEN
 		dbms_output.put_line(SQLCODE || '----' || SQLERRM);
-	ELSIF var = 0 THEN
+ELSIF var = 0 THEN
 		dbms_output.put_line('该部门记录已经存在！');
-	ELSE
+ELSE
 		dbms_output.put_line('添加记录成功！');
-		demo_pack.query_dept(90);
-		dbms_output.put_line(demo_pack.deptrec.deptno || '---' || demo_pack.deptrec.dname || '---' ||
+demo_pack.query_dept(90);
+dbms_output.put_line(demo_pack.deptrec.deptno || '---' || demo_pack.deptrec.dname || '---' ||
 							 demo_pack.deptrec.loc);
-		var := demo_pack.remove_dept(90);
-		IF var = -1 THEN
+var := demo_pack.remove_dept(90);
+IF var = -1 THEN
 			dbms_output.put_line(SQLCODE || '----' || SQLERRM);
-		ELSIF var = 0 THEN
+ELSIF var = 0 THEN
 			dbms_output.put_line('该部门记录不存在！');
-		ELSE
+ELSE
 			dbms_output.put_line('删除记录成功！');
-		END IF;
-	END IF;
+END IF;
+END IF;
 END;
 
 
 --例 2: 创建包 emp_package
-CREATE OR REPLACE PACKAGE emp_package IS
+CREATE OR
+REPLACE package emp_package IS
 	TYPE emp_table_type IS TABLE OF emp%ROWTYPE INDEX BY BINARY_INTEGER;
-	PROCEDURE read_emp_table(p_emp_table OUT emp_table_type);
+PROCEDURE read_emp_table(p_emp_table OUT emp_table_type);
 END emp_package;
 --创建包的主体
-CREATE OR REPLACE PACKAGE BODY emp_package IS
+CREATE OR
+REPLACE package BODY emp_package IS
 	PROCEDURE read_emp_table(p_emp_table OUT emp_table_type) IS
-		i BINARY_INTEGER := 0;
-	BEGIN
-		FOR emp_record IN (SELECT *
+	i BINARY_INTEGER := 0;
+BEGIN FOR emp_record IN (SELECT *
 						   FROM   emp) LOOP
 			p_emp_table(i) := emp_record;
-			i := i + 1;
-		END LOOP;
-	END read_emp_table;
+i := i + 1;
+END LOOP;
+END read_emp_table;
 END emp_package;
 
 DECLARE
 	e_table emp_package.emp_table_type;
-BEGIN
-	emp_package.read_emp_table(e_table);
-	FOR i IN e_table.first .. e_table.last LOOP
+BEGIN emp_package.read_emp_table(e_table);
+FOR i IN e_table.first .. e_table.last LOOP
 		dbms_output.put_line(e_table(i).empno || ’ ‘ || e_table(i).ename);
-	END LOOP;
+END LOOP;
 END;
 
 
 --例 3: 创建包 emp_mgmt：
 --创建序列1
-CREATE SEQUENCE empseq
-    START WITH 1000
+CREATE
+SEQUENCE empseq
+    START
+WITH 1000
     INCREMENT BY 1
     ORDER NOCYCLE;
 
 --创建序列2
-CREATE SEQUENCE deptseq
-    START WITH 50
+CREATE
+SEQUENCE deptseq
+    START
+WITH 50
     INCREMENT BY 10
     ORDER NOCYCLE;
-    
+
 --创建包
-CREATE OR REPLACE PACKAGE emp_mgmt AS
+CREATE OR
+REPLACE package emp_mgmt AS
 	FUNCTION hire
-	(
-		ename  VARCHAR2,
-		job    VARCHAR2,
-		mgr    NUMBER,
-		sal    NUMBER,
-		comm   NUMBER,
-		deptno NUMBER
-	) RETURN NUMBER;
-	FUNCTION create_dept
+(ename VARCHAR2,
+ job VARCHAR2,
+ mgr NUMBER,
+ sal NUMBER,
+ comm NUMBER,
+ deptno NUMBER) RETURN NUMBER;
+FUNCTION create_dept
 	(
 		dname VARCHAR2,
 		loc   VARCHAR2
 	) RETURN NUMBER;
-	PROCEDURE remove_emp(empno NUMBER);
-	PROCEDURE remove_dept(deptno NUMBER);
-	PROCEDURE increase_sal
+PROCEDURE remove_emp(empno NUMBER);
+PROCEDURE remove_dept(deptno NUMBER);
+PROCEDURE increase_sal
 	(
 		empno    NUMBER,
 		sal_incr NUMBER
 	);
-	PROCEDURE increase_comm
+PROCEDURE increase_comm
 	(
 		empno     NUMBER,
 		comm_incr NUMBER
@@ -243,13 +245,14 @@ CREATE OR REPLACE PACKAGE emp_mgmt AS
 END emp_mgmt;
 
 --创建包的主体
-CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
-	tot_emps  NUMBER;
-	tot_depts NUMBER;
-	no_sal  EXCEPTION;
-	no_comm EXCEPTION;
-    
-    --存储函数
+CREATE OR
+REPLACE package BODY emp_mgmt AS
+	tot_emps NUMBER;
+tot_depts NUMBER;
+no_sal  EXCEPTION;
+no_comm EXCEPTION;
+
+--存储函数
 	FUNCTION hire
 	(
 		ename  VARCHAR2,
@@ -260,91 +263,93 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
 		deptno NUMBER
 	) RETURN NUMBER IS
 		new_empno NUMBER(4);
-	BEGIN
-		SELECT empseq.nextval
-		INTO   new_empno
-		FROM   dual;
-		INSERT INTO emp
-		VALUES
-			(new_empno,
-			 ename,
-			 job,
-			 mgr,
-			 SYSDATE,
-			 sal,
-			 comm,
-			 deptno);
-		tot_emps := tot_emps + 1;
-		RETURN(new_empno);
-	EXCEPTION
+BEGIN
+SELECT empseq.nextval
+	INTO new_empno
+	FROM dual;
+INSERT INTO emp
+	VALUES (new_empno,
+			ename,
+			job,
+			mgr,
+			sysdate,
+			sal,
+			comm,
+			deptno);
+tot_emps := tot_emps + 1;
+RETURN
+(new_empno);
+EXCEPTION
 		WHEN OTHERS THEN
 			dbms_output.put_line('发生其它错误!');
-	END hire;
+END hire;
 
-	--存储函数
+--存储函数
 	FUNCTION create_dept
 	(
 		dname VARCHAR2,
 		loc   VARCHAR2
 	) RETURN NUMBER IS
 		new_deptno NUMBER(4);
-	BEGIN
-		SELECT deptseq.nextval
-		INTO   new_deptno
-		FROM   dual;
-		INSERT INTO dept
-		VALUES
-			(new_deptno,
-			 dname,
-			 loc);
-		tot_depts := tot_depts;
-		RETURN(new_deptno);
-	EXCEPTION
+BEGIN
+SELECT deptseq.nextval
+	INTO new_deptno
+	FROM dual;
+INSERT INTO dept
+	VALUES (new_deptno,
+			dname,
+			loc);
+tot_depts := tot_depts;
+RETURN
+(new_deptno);
+EXCEPTION
 		WHEN OTHERS THEN
 			dbms_output.put_line('发生其它错误!');
-	END create_dept;
+END create_dept;
 
-	--存储过程
+--存储过程
 	PROCEDURE remove_emp(empno NUMBER) IS
 		no_result EXCEPTION;
-	BEGIN
-		DELETE FROM emp
-		WHERE  emp.empno = remove_emp.empno;
-		IF SQL%NOTFOUND THEN
+BEGIN
+DELETE
+	FROM emp
+	WHERE emp.empno = remove_emp.empno;
+IF SQL%NOTFOUND THEN
 			RAISE no_result;
-		END IF;
-		tot_emps := tot_emps - 1;
-	EXCEPTION
+END IF;
+tot_emps := tot_emps - 1;
+EXCEPTION
 		WHEN no_result THEN
 			dbms_output.put_line('你需要的数据不存在!');
-		WHEN OTHERS THEN
+WHEN OTHERS THEN
 			dbms_output.put_line('发生其它错误!');
-	END remove_emp;
+END remove_emp;
 
-	--存储过程
+--存储过程
 	PROCEDURE remove_dept(deptno NUMBER) IS
 		no_result          EXCEPTION;
-		e_deptno_remaining EXCEPTION;
-		PRAGMA EXCEPTION_INIT(e_deptno_remaining,
+e_deptno_remaining EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_deptno_remaining,
 							  -2292);
 		/* -2292 是违反一致性约束的错误代码 */
-	BEGIN
-		DELETE FROM dept
-		WHERE  dept.deptno = remove_dept.deptno;
-		IF SQL%NOTFOUND THEN
+BEGIN
+DELETE
+	FROM dept
+	WHERE dept.deptno = remove_dept.deptno;
+IF SQL%NOTFOUND THEN
 			RAISE no_result;
-		END IF;
-		tot_depts := tot_depts - 1;
-	EXCEPTION
+END IF;
+tot_depts := tot_depts - 1;
+EXCEPTION
 		WHEN no_result THEN
 			dbms_output.put_line('你需要的数据不存在!');
-		WHEN e_deptno_remaining THEN
+WHEN e_deptno_remaining THEN
 			dbms_output.put_line('违反数据完整性约束!');
-		WHEN OTHERS THEN
+WHEN OTHERS THEN
 			dbms_output.put_line('发生其它错误!');
-	END remove_dept;
+END remove_dept;
 
-	--存储过程
+--存储过程
 	PROCEDURE increase_sal
 	(
 		empno    NUMBER,
@@ -352,28 +357,29 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
 	) IS
 		curr_sal NUMBER(7,
 						2);
-	BEGIN
-		SELECT sal
-		INTO   curr_sal
-		FROM   emp
-		WHERE  emp.empno = increase_sal.empno;
-		IF curr_sal IS NULL THEN
+BEGIN
+SELECT sal
+	INTO curr_sal
+	FROM emp
+	WHERE emp.empno = increase_sal.empno;
+IF curr_sal IS NULL THEN
 			RAISE no_sal;
-		ELSE
-			UPDATE emp
-			SET    sal = sal + increase_sal.sal_incr
-			WHERE  emp.empno = increase_sal.empno;
-		END IF;
-	EXCEPTION
+ELSE
+UPDATE emp
+SET
+	sal = sal + increase_sal.sal_incr
+	WHERE emp.empno = increase_sal.empno;
+END IF;
+EXCEPTION
 		WHEN no_data_found THEN
 			dbms_output.put_line('你需要的数据不存在!');
-		WHEN no_sal THEN
+WHEN no_sal THEN
 			dbms_output.put_line('此员工的工资不存在!');
-		WHEN OTHERS THEN
+WHEN OTHERS THEN
 			dbms_output.put_line('发生其它错误!');
-	END increase_sal;
+END increase_sal;
 
-	--存储过程
+--存储过程
 	PROCEDURE increase_comm
 	(
 		empno     NUMBER,
@@ -381,26 +387,27 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
 	) IS
 		curr_comm NUMBER(7,
 						 2);
-	BEGIN
-		SELECT comm
-		INTO   curr_comm
-		FROM   emp
-		WHERE  emp.empno = increase_comm.empno;
-		IF curr_comm IS NULL THEN
+BEGIN
+SELECT comm
+	INTO curr_comm
+	FROM emp
+	WHERE emp.empno = increase_comm.empno;
+IF curr_comm IS NULL THEN
 			RAISE no_comm;
-		ELSE
-			UPDATE emp
-			SET    comm = comm + increase_comm.comm_incr
-			WHERE  emp.empno = increase_comm.empno;
-		END IF;
-	EXCEPTION
+ELSE
+UPDATE emp
+SET
+	comm = comm + increase_comm.comm_incr
+	WHERE emp.empno = increase_comm.empno;
+END IF;
+EXCEPTION
 		WHEN no_data_found THEN
 			dbms_output.put_line('你需要的数据不存在!');
-		WHEN no_comm THEN
+WHEN no_comm THEN
 			dbms_output.put_line('此员工的奖金不存在!');
-		WHEN OTHERS THEN
+WHEN OTHERS THEN
 			dbms_output.put_line('发生其它错误!');
-	END increase_comm;
+END increase_comm;
 
 END emp_mgmt;
 
@@ -410,10 +417,12 @@ END emp_mgmt;
 --并可向包中的子程序传递游标变量参数。
 
 --创建包
-CREATE OR REPLACE PACKAGE curvarpack AS
-	TYPE deptcurtype IS REF CURSOR RETURN dept%ROWTYPE; --强类型定义
+CREATE OR
+REPLACE package curvarpack AS
+	TYPE deptcurtype IS REF CURSOR RETURN dept%ROWTYPE;
+--强类型定义
 	TYPE curtype IS REF CURSOR; -- 弱类型定义
-	PROCEDURE opendeptvar
+PROCEDURE opendeptvar
 	(
 		cv        IN OUT deptcurtype,
 		choice    INTEGER DEFAULT 0,
@@ -423,104 +432,104 @@ CREATE OR REPLACE PACKAGE curvarpack AS
 END;
 
 --创建包的主体
-CREATE OR REPLACE PACKAGE BODY curvarpack AS
+CREATE OR
+REPLACE package BODY curvarpack AS
 	PROCEDURE opendeptvar
-	(
-		cv        IN OUT deptcurtype,
-		choice    INTEGER DEFAULT 0,
-		dept_no   NUMBER DEFAULT 50,
-		dept_name VARCHAR DEFAULT ‘%’
-	) IS
-	BEGIN
-		IF choice = 1 THEN
+(cv IN OUT deptcurtype,
+ choice INTEGER DEFAULT 0,
+ dept_no NUMBER DEFAULT 50,
+ dept_name VARCHAR DEFAULT ‘ % ’) IS
+BEGIN IF choice = 1 THEN
 			OPEN cv FOR
-				SELECT *
-				FROM   dept
-				WHERE  deptno <= dept_no;
-		ELSIF choice = 2 THEN
+SELECT *
+	FROM dept
+	WHERE deptno <= dept_no;
+ELSIF choice = 2 THEN
 			OPEN cv FOR
-				SELECT *
-				FROM   dept
-				WHERE  dname LIKE dept_name;
-		ELSE
+SELECT *
+	FROM dept
+	WHERE dname LIKE dept_name;
+ELSE
 			OPEN cv FOR
-				SELECT *
-				FROM   dept;
-		END IF;
-	END opendeptvar;
+SELECT *
+	FROM dept;
+END IF;
+END opendeptvar;
 END curvarpack;
 
-	--定义一个过程
-	CREATE OR REPLACE PROCEDURE opencurtype
+--定义一个过程
+	CREATE OR
+REPLACE procedure opencurtype
 (
-	cv  IN OUT curvarpack.curtype,
-	tab CHAR
-) AS
-BEGIN
-	--由于 CurVarPack.CurType 采用弱类型定义
+cv IN OUT curvarpack.curtype,
+tab CHAR
+)
+AS
+BEGIN --由于 CurVarPack.CurType 采用弱类型定义
 	--所以可以使用它定义的游标变量打开不同类型的查询语句
 	IF tab = ‘d’ THEN
 		OPEN cv FOR
-			SELECT *
-			FROM   dept;
-	ELSE
+SELECT *
+	FROM dept;
+ELSE
 		OPEN cv FOR
-			SELECT *
-			FROM   emp;
-	END IF;
+SELECT *
+	FROM emp;
+END IF;
 END opencurtype;
 --定义一个应用
 DECLARE
 	deptrec dept%ROWTYPE;
-	emprec  emp%ROWTYPE;
-	cv1     curvarpack.deptcurtype;
-	cv2     curvarpack.curtype;
-BEGIN
-	dbms_output.put_line('游标变量强类型定义应用');
-	curvarpack.opendeptvar(cv1,
+emprec  emp%ROWTYPE;
+cv1     curvarpack.deptcurtype;
+cv2     curvarpack.curtype;
+BEGIN dbms_output.put_line('游标变量强类型定义应用');
+curvarpack.opendeptvar(cv1,
 						   1,
 						   30);
-	FETCH cv1
+FETCH cv1
 		INTO deptrec;
-	WHILE cv1%FOUND LOOP
+WHILE cv1%FOUND LOOP
 		dbms_output.put_line(deptrec.deptno || ' :' || deptrec.dname);
-		FETCH cv1
+FETCH cv1
 			INTO deptrec;
-	END LOOP;
-	CLOSE cv1;
+END LOOP;
+CLOSE cv1;
 
-	dbms_output.put_line('游标变量弱类型定义应用');
-	curvarpack.opendeptvar(cv2,
+dbms_output.put_line('游标变量弱类型定义应用');
+curvarpack.opendeptvar(cv2,
 						   2,
 						   dept_name => 'a%');
-	FETCH cv2
+FETCH cv2
 		INTO deptrec;
-	WHILE cv2%FOUND LOOP
+WHILE cv2%FOUND LOOP
 		dbms_output.put_line(deptrec.deptno || ' :' || deptrec.dname);
-		FETCH cv2
+FETCH cv2
 			INTO deptrec;
-	END LOOP;
-	dbms_output.put_line('游标变量弱类型定义应用—dept 表');
-	opencurtype(cv2,
-				‘d’);
-	FETCH cv2
+END LOOP;
+dbms_output.put_line('游标变量弱类型定义应用—dept 表');
+opencurtype
+(cv2,
+‘d’);
+FETCH cv2
 		INTO deptrec;
-	WHILE cv2%FOUND LOOP
+WHILE cv2%FOUND LOOP
 		dbms_output.put_line(deptrec.deptno || ' :' || deptrec.dname);
-		FETCH cv2
+FETCH cv2
 			INTO deptrec;
-	END LOOP;
-	dbms_output.put_line('游标变量弱类型定义应用—emp 表');
-	opencurtype(cv2,
-				‘e’);
-	FETCH cv2
+END LOOP;
+dbms_output.put_line('游标变量弱类型定义应用—emp 表');
+opencurtype
+(cv2,
+‘e’);
+FETCH cv2
 		INTO emprec;
-	WHILE cv2%FOUND LOOP
+WHILE cv2%FOUND LOOP
 		dbms_output.put_line(emprec.empno || ' :' || emprec.ename);
-		FETCH cv2
+FETCH cv2
 			INTO emprec;
-	END LOOP;
-	CLOSE cv2;
+END LOOP;
+CLOSE cv2;
 END;
 
 
@@ -531,84 +540,89 @@ PL/SQL  允许对包内子程序和本地子程序进行重载。所谓重载时
 */
 --例 5
 --创建包
-CREATE OR REPLACE PACKAGE demo_pack1 IS
-	deptrec   dept%ROWTYPE;
-	v_sqlcode NUMBER;
-	v_sqlerr  VARCHAR2(2048);
-	FUNCTION query_dept(dept_no IN NUMBER) RETURN INTEGER;
-	FUNCTION query_dept(dept_no IN VARCHAR2) RETURN INTEGER;
+CREATE OR
+REPLACE package demo_pack1 IS
+	deptrec dept%ROWTYPE;
+v_sqlcode NUMBER;
+v_sqlerr  VARCHAR2(2048);
+FUNCTION query_dept(dept_no IN NUMBER) RETURN INTEGER;
+FUNCTION query_dept(dept_no IN VARCHAR2) RETURN INTEGER;
 END demo_pack1;
 
 --创建包的主体
-CREATE OR REPLACE PACKAGE BODY demo_pack1 IS
-
+CREATE OR
+REPLACE package BODY demo_pack1 IS
 	--存储函数1
 	FUNCTION check_dept(dept_no NUMBER) RETURN INTEGER IS
-		flag INTEGER;
-	BEGIN
-		SELECT COUNT(*)
-		INTO   flag
-		FROM   dept
-		WHERE  deptno = dept_no;
-		IF flag > 0 THEN
+	flag INTEGER;
+BEGIN
+SELECT COUNT(*)
+	INTO flag
+	FROM dept
+	WHERE deptno = dept_no;
+IF flag > 0 THEN
 			RETURN 1;
-		ELSE
+ELSE
 			RETURN 0;
-		END IF;
-	END check_dept;
-    
-    --存储函数1的重载
+END IF;
+END check_dept;
+
+--存储函数1的重载
 	FUNCTION check_dept(dept_no VARCHAR2) RETURN INTEGER IS
 		flag INTEGER;
-	BEGIN
-		SELECT COUNT(*)
-		INTO   flag
-		FROM   dept
-		WHERE  deptno = dept_no;
-		IF flag > 0 THEN
+BEGIN
+SELECT COUNT(*)
+	INTO flag
+	FROM dept
+	WHERE deptno = dept_no;
+IF flag > 0 THEN
 			RETURN 1;
-		ELSE
+ELSE
 			RETURN 0;
-		END IF;
-	END check_dept;
-    
-    --存储函数2
+END IF;
+END check_dept;
+
+--存储函数2
 	FUNCTION query_dept(dept_no IN NUMBER) RETURN INTEGER IS
-	BEGIN
-		IF check_dept(dept_no) = 1 THEN
-			SELECT *
-			INTO   deptrec
-			FROM   dept
-			WHERE  deptno = dept_no;
-			RETURN 1;
-		ELSE
+BEGIN IF check_dept(dept_no) = 1 THEN
+SELECT *
+	INTO deptrec
+	FROM dept
+	WHERE deptno = dept_no;
+RETURN 1;
+ELSE
 			RETURN 0;
-		END IF;
-	END query_dept;
-    
-	--存储函数2的重载
+END IF;
+END query_dept;
+
+--存储函数2的重载
 	FUNCTION query_dept(dept_no IN VARCHAR2) RETURN INTEGER IS
-	BEGIN
-		IF check_dept(dept_no) = 1 THEN
-			SELECT *
-			INTO   deptrec
-			FROM   dept
-			WHERE  deptno = dept_no;
-			RETURN 1;
-		ELSE
+BEGIN IF check_dept(dept_no) = 1 THEN
+SELECT *
+	INTO deptrec
+	FROM dept
+	WHERE deptno = dept_no;
+RETURN 1;
+ELSE
 			RETURN 0;
-		END IF;
-	END query_dept;
+END IF;
+END query_dept;
 END demo_pack1;
 
 --删除包
---可以使用 DROP PACKAGE 命令对不需要的包进行删除，语法如下：
---DROP PACKAGE [BODY] [user.]package_name;
+--可以使用 DROP
+PACKAGE 命令对不需要的包进行删除，语法如下：
+--DROP
+PACKAGE [BODY] [USER.]package_name;
 
-DROP PACKAGE demo_pack;
-DROP PACKAGE demo_pack1;
-DROP PACKAGE emp_mgmt;
-DROP PACKAGE emp_package;
+DROP
+PACKAGE demo_pack;
+DROP
+PACKAGE demo_pack1;
+DROP
+PACKAGE emp_mgmt;
+DROP
+PACKAGE emp_package;
 
 
 --包的管理
