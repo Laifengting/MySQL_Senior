@@ -129,4 +129,24 @@ public class ShardingApplicationTests {
 		wrapper.eq("dict_id", 583803437544636416L);
 		udictMapper.delete(wrapper);
 	}
+	
+	//======================== 测试读写分离 ========================
+	@Test
+	public void addWriteUserDb() {
+		for (int i = 1; i <= 50; i++) {
+			User user = new User();
+			user.setUsername("JAVA" + i);
+			user.setUstatus("SQL" + i);
+			userMapper.insert(user);
+		}
+	}
+	
+	@Test
+	public void findReadUserDb() {
+		QueryWrapper<User> wrapper = new QueryWrapper<>();
+		// 设置查询条件user_id
+		wrapper.eq("user_id", 584067306133389312L);
+		User user = userMapper.selectOne(wrapper);
+		System.out.println("========================= " + user + " =========================");
+	}
 }
